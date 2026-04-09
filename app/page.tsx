@@ -1,65 +1,115 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
-export default function Home() {
+// --- CONFIGURATION ---
+// This tells the app: "Go look in the .env.local file for the actual URL"
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+export default function CommunityRoom() {
+  const [objects, setObjects] = useState<any[]>([]);
+  const [selectedType, setSelectedType] = useState('📦');
+
+  // 1. Initial Load & Realtime Subscription
+  useEffect(() => {
+
+    // --- YOUR TEST LOG ---
+    // This will print whatever you wrote in .env.local to the browser console
+    console.log("Secret Message:", process.env.NEXT_PUBLIC_DEBUG_MESSAGE);
+
+    // Fetch existing objects from the DB
+    const fetchObjects = async () => {
+      const { data } = await supabase.from('room_objects').select('*');
+      setObjects(data || []);
+    };
+
+    fetchObjects();
+
+    // Listen for real-time changes (Inserts, Updates, Deletes)
+    const channel = supabase.channel('room-changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'room_objects' }, 
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setObjects((prev) => [...prev, payload.new]);
+          } else if (payload.eventType === 'UPDATE') {
+            setObjects((prev) => prev.map(obj => obj.id === payload.new.id ? payload.new : obj));
+          } else if (payload.eventType === 'DELETE') {
+            setObjects((prev) => prev.filter(obj => obj.id !== payload.old.id));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  // 2. Add a new object where you click
+  const addObject = async (e: React.MouseEvent) => {
+    // Prevent adding if clicking on an existing object
+    if ((e.target as HTMLElement).id !== 'room-floor') return;
+
+    const newItem = { 
+      type: selectedType, 
+      x: e.clientX - 20, 
+      y: e.clientY - 20 
+    };
+
+    const { error } = await supabase.from('room_objects').insert([newItem]);
+    if (error) console.error('Error adding object:', error);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main 
+      id="room-floor"
+      className="h-screen w-screen bg-slate-50 overflow-hidden relative cursor-crosshair" 
+      style={{ 
+        backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)', 
+        backgroundSize: '30px 30px' 
+      }}
+      onClick={addObject}
+    >
+      {/* UI Overlay */}
+        <div className="absolute top-6 left-6 text-slate-900 pointer-events-none z-10">
+        <h1 className="text-3xl font-black tracking-tighter">OPENROOM</h1>
+        <p className="opacity-60">Community Plaza • {objects.length} items placed</p>
+        
+        <div className="mt-4 flex gap-2 pointer-events-auto">
+          {['📦', '🌲', '🛋️', '🐈', '✨', '🏮'].map((item) => (
+            <button
+              key={item}
+              onClick={() => setSelectedType(item)}
+              className={`w-12 h-12 flex items-center justify-center rounded-lg border-2 transition-all ${
+                selectedType === item ? 'bg-white border-blue-500 shadow-lg scale-110' : 'bg-white border-slate-200 hover:border-slate-300'
+              }`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <span className="text-2xl">{item}</span>
+            </button>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </div>
+
+      {/* The Objects */}
+      {objects.map((obj) => (
+        <div 
+          key={obj.id}
+          className="absolute text-4xl select-none transition-all duration-300 pointer-events-none"
+          style={{ left: obj.x, top: obj.y }}
+        >
+          {obj.type}
         </div>
-      </main>
-    </div>
+      ))}
+
+      {/* Empty State Instruction */}
+      {objects.length === 0 && (
+          <div className="h-full w-full flex items-center justify-center text-slate-300 pointer-events-none">
+          Click anywhere to start decorating the plaza...
+        </div>
+      )}
+    </main>
   );
 }
