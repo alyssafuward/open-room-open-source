@@ -136,7 +136,7 @@ export default function OpenRoom() {
                 onClick={() => setActiveRoom(room)}
                 className={`w-28 h-28 rounded-2xl shadow-md flex flex-col items-center justify-center transition-all hover:scale-105 border-2 ${
                   isCommon ? 'bg-white border-amber-400 text-slate-900' :
-                  room.owner_id === myId ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-white border-slate-200 text-slate-700'
+                  room.owner_id === myId ? 'bg-indigo-600 border-indigo-400 text-white' : 'bg-sky-100 border-sky-300 text-slate-700'
                 }`}
               >
                 <span className="text-[9px] uppercase tracking-widest opacity-60 font-bold">{room.owner_name}</span>
