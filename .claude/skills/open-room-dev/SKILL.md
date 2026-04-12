@@ -151,7 +151,7 @@ Ready to submit? I'll open a pull request to add your changes to the live projec
 gh pr create --title "..." --body "..."
 ```
 
-Return the PR URL. Then walk them through the Vercel approval:
+Return the full PR URL (e.g. `https://github.com/alyssafuward/open-room-open-source/pull/16`) as a clickable link — not just the issue reference. Then walk them through the Vercel approval:
 
 ---
 
