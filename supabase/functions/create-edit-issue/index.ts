@@ -17,13 +17,13 @@ serve(async (req) => {
     return new Response('Method not allowed', { status: 405, headers: corsHeaders });
   }
 
-  const { registryId, githubUsername, gridX, gridY } = await req.json();
+  const { registryId, githubUsername, gridX, gridY, title: editTitle, description } = await req.json();
 
-  if (!registryId || !githubUsername) {
+  if (!registryId || !githubUsername || !editTitle) {
     return new Response('Missing required fields', { status: 400, headers: corsHeaders });
   }
 
-  const title = `Edit request: ${registryId} (@${githubUsername})`;
+  const title = `Task: ${registryId} (@${githubUsername}) — ${editTitle}`;
   const body = [
     `An edit has been requested for this room.`,
     ``,
@@ -33,8 +33,10 @@ serve(async (req) => {
     `| GitHub | @${githubUsername} |`,
     `| Grid position | (${gridX ?? '?'}, ${gridY ?? '?'}) |`,
     ``,
+    description ? `**What to change:** ${description}` : '',
+    ``,
     `**Next step:** @${githubUsername} should fork the repo, update \`public/registry/${registryId}/\`, and open a PR.`,
-  ].join('\n');
+  ].filter(line => line !== null).join('\n');
 
   const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues`, {
     method: 'POST',

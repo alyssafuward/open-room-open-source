@@ -53,6 +53,9 @@ export default function RoomView({ onBack, registryId, room }: {
   const [registryEntries, setRegistryEntries] = useState<RegistryEntry[]>([]);
   const [registryLoading, setRegistryLoading] = useState(false);
   const [showRoomInfo, setShowRoomInfo] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
   const [editRequested, setEditRequested] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [editError, setEditError] = useState(false);
@@ -75,11 +78,13 @@ export default function RoomView({ onBack, registryId, room }: {
         githubUsername: room?.github_username ?? config?.owner,
         gridX: room?.grid_x,
         gridY: room?.grid_y,
+        title: editTitle,
+        description: editDescription,
       },
     });
     setEditLoading(false);
-    if (error) setEditError(true);
-    else setEditRequested(true);
+    if (error) { setEditError(true); }
+    else { setShowEditModal(false); setEditRequested(true); }
   };
 
   const openRegistry = async () => {
@@ -229,16 +234,13 @@ export default function RoomView({ onBack, registryId, room }: {
               </div>
               <div className="mt-3 pt-3 border-t border-slate-100">
                 {editRequested ? (
-                  <p className="text-xs text-center text-green-600 font-bold">Edit request submitted!</p>
-                ) : editError ? (
-                  <p className="text-xs text-center text-red-500 font-bold">Something went wrong. Try again.</p>
+                  <p className="text-xs text-center text-green-600 font-bold">Edit task created!</p>
                 ) : (
                   <button
-                    onClick={requestEdit}
-                    disabled={editLoading}
-                    className="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors disabled:opacity-50"
+                    onClick={() => { setEditError(false); setShowEditModal(true); }}
+                    className="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors"
                   >
-                    {editLoading ? 'Requesting…' : 'Edit Room'}
+                    Open a Task
                   </button>
                 )}
               </div>
@@ -361,6 +363,53 @@ export default function RoomView({ onBack, registryId, room }: {
               className="w-full py-3.5 bg-slate-900 text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-indigo-600 transition-colors"
             >
               Back to Room
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Task Modal */}
+      {showEditModal && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+          onClick={() => setShowEditModal(false)}
+        >
+          <div
+            className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            <h2 className="text-slate-900 text-xl font-black tracking-tight mb-1">Open a Task</h2>
+            <p className="text-slate-500 text-sm mb-6 leading-relaxed">Describe what you want to change. A GitHub issue will be opened for this room.</p>
+            <div className="space-y-3 mb-4">
+              <div>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400 block mb-1.5">Title</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={e => setEditTitle(e.target.value)}
+                  placeholder="e.g. New background image"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400 block mb-1.5">Description</label>
+                <textarea
+                  value={editDescription}
+                  onChange={e => setEditDescription(e.target.value)}
+                  placeholder="e.g. Replace the current background with a night-time version, and add a hotspot for my portfolio"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  rows={3}
+                />
+              </div>
+            </div>
+            {editError && <p className="text-xs text-red-500 font-bold mb-3">Something went wrong. Try again.</p>}
+            <button
+              onClick={requestEdit}
+              disabled={editLoading || !editTitle.trim() || !editDescription.trim()}
+              className="w-full py-3 bg-slate-900 text-white rounded-xl text-sm font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors disabled:opacity-50"
+            >
+              {editLoading ? 'Creating…' : 'Open a Task'}
             </button>
           </div>
         </div>
