@@ -146,7 +146,26 @@ jobs:
 
           async function syncRoom(folder) {
             const configPath = `public/registry/${folder}/config.json`;
-            if (!fs.existsSync(configPath)) return;
+            if (!fs.existsSync(configPath)) {
+              // Room folder was deleted — free the spot back up
+              const res = await fetch(
+                `${process.env.SUPABASE_URL}/rest/v1/rooms?registry_id=eq.${encodeURIComponent(folder)}`,
+                {
+                  method: 'PATCH',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY,
+                    'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+                    'Prefer': 'return=representation',
+                  },
+                  body: JSON.stringify({ status: 'reserved', name: null }),
+                }
+              );
+              const data = await res.json();
+              if (!res.ok) { console.error(`Failed to free: ${folder}`, data); process.exit(1); }
+              console.log(`✓ ${folder} freed (status → reserved)`);
+              return;
+            }
 
             const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
             const name = config.room_display_name;
