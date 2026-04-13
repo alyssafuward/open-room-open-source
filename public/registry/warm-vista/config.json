@@ -1,7 +1,7 @@
 {
   "room_display_name": "Warm vista",
   "owner": "arrawyn",
-  "background_image": "/registry/warm-vista/background.png",
+  "background_image": "background.png",
   "hide_back_button": false,
   "links": [],
   "hotspots": [
