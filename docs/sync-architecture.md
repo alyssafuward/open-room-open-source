@@ -23,7 +23,7 @@ The GitHub Action `sync-rooms.yml` keeps them in sync.
 | Change type | Dev (on PR) | Prod (on merge) |
 |---|---|---|
 | Name change (`room_display_name` in config.json) | ✓ updated | ✓ updated |
-| Room deleted (folder removed) | ✓ status → `reserved` | ✓ status → `reserved` |
+| Room deleted (folder removed) | ✓ row deleted from DB | ✓ row deleted from DB |
 | Room added (new config.json) | ✓ status → `active` | ✓ status → `active` |
 | Coordinate change (`grid_x`, `grid_y`) | ✗ not handled | ✗ not handled |
 
