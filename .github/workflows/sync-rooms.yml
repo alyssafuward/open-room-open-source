@@ -1,6 +1,11 @@
 name: Sync rooms to Supabase
 
 on:
+  # Same-repo PRs: use pull_request so the workflow runs from the PR branch
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+  # Fork PRs: use pull_request_target so secrets are accessible
   pull_request_target:
     types: [opened, synchronize]
     branches: [main]
@@ -13,7 +18,11 @@ jobs:
   # On PR: update changed rooms in dev so preview reflects config
   # New reservations are mirrored to dev automatically via the mirror-to-dev Edge Function
   sync-prod-to-dev:
-    if: github.event_name == 'pull_request_target'
+    # Run on pull_request (same-repo) OR pull_request_target (fork)
+    # For pull_request_target, skip same-repo PRs to avoid running twice
+    if: |
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -115,7 +124,7 @@ jobs:
 
   # On merge to main: update changed rooms in prod, then sync prod → dev
   sync-on-merge:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
