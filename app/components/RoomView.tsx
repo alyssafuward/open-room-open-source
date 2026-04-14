@@ -19,6 +19,7 @@ interface Hotspot {
   url?: string;
   room_id?: string;
   path?: string;
+  hint?: boolean;
 }
 
 interface RoomLink {
@@ -216,7 +217,7 @@ export default function RoomView({ onBack, registryId, room }: {
           <button
             key={hotspot.id}
             onClick={() => handleHotspot(hotspot)}
-            className="absolute rounded-lg group transition-colors hover:bg-white/20"
+            className={`absolute rounded-lg group transition-colors hover:bg-white/25 ${hotspot.hint ? 'bg-white/10 ring-1 ring-white/30' : ''}`}
             style={{
               left: `${hotspot.x}%`,
               top: `${hotspot.y}%`,
@@ -226,7 +227,7 @@ export default function RoomView({ onBack, registryId, room }: {
             }}
             aria-label={hotspot.label}
           >
-            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/70 text-white text-[11px] font-bold rounded-full whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/70 text-white text-[11px] font-bold rounded-full whitespace-nowrap transition-opacity pointer-events-none ${hotspot.hint ? 'opacity-60 group-hover:opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
               {hotspot.label}
             </span>
           </button>

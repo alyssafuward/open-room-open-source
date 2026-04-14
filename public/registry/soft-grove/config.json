@@ -1,5 +1,5 @@
 {
-  "room_display_name": "Room of Doors",
+  "room_display_name": "Alyssa's Studio",
   "owner": "alyssafuward",
   "background_image": "/registry/soft-grove/background.jpeg",
   "hide_back_button": false,
@@ -7,22 +7,24 @@
     {
       "id": "door-100-days",
       "label": "100 Days Room",
-      "x": 21,
-      "y": 27,
-      "width": 17,
-      "height": 47,
+      "x": 14,
+      "y": 2,
+      "width": 15,
+      "height": 25,
       "action": "navigate_page",
-      "path": "pages/100-days/config.json"
+      "path": "pages/100-days/config.json",
+      "hint": true
     },
     {
       "id": "door-ai-superbuilders",
       "label": "AI Superbuilders",
-      "x": 62,
-      "y": 27,
-      "width": 17,
-      "height": 47,
+      "x": 16,
+      "y": 29,
+      "width": 15,
+      "height": 21,
       "action": "navigate_page",
-      "path": "pages/ai-superbuilders/config.json"
+      "path": "pages/ai-superbuilders/config.json",
+      "hint": true
     }
   ]
 }
