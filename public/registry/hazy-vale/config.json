@@ -11,46 +11,66 @@
     {
       "id": "welcome",
       "label": "Welcome to Hazy Vale",
-      "x": 18,
-      "y": 18,
-      "width": 22,
-      "height": 30,
+      "x": 48,
+      "y": 5,
+      "width": 30,
+      "height": 35,
       "action": "open_modal",
       "modal": "welcome_guide",
       "modal_content": {
-        "title": "Hello friend!",
-        "body": "Welcome to field notes from the uncharted middle of AI adoption. The experiments are running. The frameworks are being built. All of it documented in real time, so you don't have to figure it out alone."
+        "title": "Hey friend, welcome!",
+        "body": "Welcome to field notes from the uncharted middle of AI adoption. The experiments are running. The frameworks are being built. All of it documented in real time, so you don't have to figure it out alone.\n\nHere you'll find some songs I love from New Zealand artists. Have a listen and enjoy!"
       }
     },
     {
-      "id": "journal",
-      "label": "Read the field notes",
-      "x": 10,
-      "y": 62,
-      "width": 45,
-      "height": 22,
+      "id": "song-aotearoa",
+      "label": "Stan Walker ft. Ria Hall, Troy Kingi, Maisey Rika — Aotearoa",
+      "x": 28,
+      "y": 42,
+      "width": 14,
+      "height": 18,
       "action": "open_url",
-      "url": "https://daringnext.substack.com/"
+      "url": "https://www.youtube.com/watch?v=jWhAoZZh8fc&list=OLAK5uy_mrFKH-iO1xw6nDoYp_abA-tUmylWW8zh0&index=3"
     },
     {
-      "id": "post-skills",
-      "label": "Ordinary Work, Extraordinary Skills",
-      "x": 58,
-      "y": 68,
-      "width": 22,
-      "height": 16,
-      "action": "open_url",
-      "url": "https://daringnext.substack.com/p/ordinary-work-extraordinary-skills-ai-era"
-    },
-    {
-      "id": "post-videos",
-      "label": "Create Short Videos with AI",
-      "x": 82,
-      "y": 55,
-      "width": 16,
+      "id": "song-iam",
+      "label": "Stan Walker — I Am",
+      "x": 44,
+      "y": 38,
+      "width": 14,
       "height": 20,
       "action": "open_url",
-      "url": "https://daringnext.substack.com/p/create-short-videos-using-ai-tools"
+      "url": "https://www.youtube.com/watch?v=IK8OOpeYHC4&list=RDIK8OOpeYHC4&start_radio=1"
+    },
+    {
+      "id": "song-welcomehome",
+      "label": "Dave Dobbyn — Welcome Home",
+      "x": 18,
+      "y": 55,
+      "width": 22,
+      "height": 18,
+      "action": "open_url",
+      "url": "https://www.youtube.com/watch?v=Wlz2uEuxyyk&list=RDWlz2uEuxyyk&start_radio=1"
+    },
+    {
+      "id": "song-beforeyouleave",
+      "label": "Six60 — Before You Leave",
+      "x": 72,
+      "y": 48,
+      "width": 20,
+      "height": 18,
+      "action": "open_url",
+      "url": "https://www.youtube.com/watch?v=0Sz8kZTDy4c"
+    },
+    {
+      "id": "song-walkietalkie",
+      "label": "Steriogram — Walkie Talkie Man",
+      "x": 42,
+      "y": 58,
+      "width": 28,
+      "height": 18,
+      "action": "open_url",
+      "url": "https://www.youtube.com/watch?v=I7UvbwCjXUk&list=RDI7UvbwCjXUk&start_radio=1"
     },
     {
       "id": "floor",
