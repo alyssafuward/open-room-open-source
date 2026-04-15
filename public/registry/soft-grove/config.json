@@ -7,10 +7,10 @@
     {
       "id": "door-ai-superbuilders",
       "label": "AI Superbuilders",
-      "x": 13.75,
+      "x": 18,
       "y": 5,
-      "width": 11.25,
-      "height": 21.25,
+      "width": 27,
+      "height": 38,
       "action": "navigate_page",
       "path": "pages/ai-superbuilders/config.json",
       "hint": true
@@ -18,9 +18,9 @@
     {
       "id": "door-100-days",
       "label": "100 Days Room",
-      "x": 47.5,
-      "y": 35,
-      "width": 12.5,
+      "x": 40,
+      "y": 45,
+      "width": 20,
       "height": 20,
       "action": "navigate_page",
       "path": "pages/100-days/config.json",
