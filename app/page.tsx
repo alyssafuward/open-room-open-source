@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import RoomView from './components/RoomView';
 import ReservationModal from './components/ReservationModal';
+import FloorPlanCanvas from './components/FloorPlanCanvas';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
@@ -131,8 +132,8 @@ function OpenRoomInner() {
   };
 
   return (
-    <main className="min-h-screen w-screen bg-stone-100 flex flex-col items-center justify-center p-20 overflow-auto">
-      <div className="mb-8 text-center">
+    <main className="w-screen bg-stone-100 flex flex-col overflow-hidden" style={{ height: '100dvh' }}>
+      <div className="pt-6 pb-4 text-center shrink-0">
         <h1 className="text-slate-900 text-3xl font-black tracking-tighter uppercase">Open Room</h1>
         <div className="flex items-center justify-center gap-2">
           <p className="text-slate-400 text-sm font-medium">Infinite Floor Plan</p>
@@ -145,9 +146,10 @@ function OpenRoomInner() {
         </div>
       </div>
 
-      <div 
-        className="grid gap-4" 
-        style={{ gridTemplateColumns: `repeat(${xRange.length}, minmax(0, 1fr))` }}
+      <FloorPlanCanvas>
+      <div
+        className="grid gap-4 p-8"
+        style={{ gridTemplateColumns: `repeat(${xRange.length}, 7rem)` }}
       >
         {yRange.map(y => xRange.map(x => {
           const room = rooms.find(r => r.grid_x === x && r.grid_y === y);
@@ -180,6 +182,7 @@ function OpenRoomInner() {
           ) : <div key={`${x}-${y}`} className="w-28 h-28" />;
         }))}
       </div>
+      </FloorPlanCanvas>
 
       {/* OPEN ROOM GUIDE MODAL */}
       {isHelpOpen && (
