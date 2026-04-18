@@ -14,8 +14,9 @@ function roomSlug(room: any): string | null {
   return room.registry_id ?? null;
 }
 
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+
 function OpenRoomInner() {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeSlug = searchParams.get('room');
