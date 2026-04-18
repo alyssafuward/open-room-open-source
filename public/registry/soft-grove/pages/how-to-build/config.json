@@ -9,7 +9,8 @@
       "y": 42,
       "width": 22,
       "height": 50,
-      "action": "navigate_floor"
+      "action": "navigate_page",
+      "path": "pages/how-to-build/step-1-reserve/config.json"
     },
     {
       "id": "step-2-build",
@@ -18,8 +19,8 @@
       "y": 42,
       "width": 22,
       "height": 50,
-      "action": "open_modal",
-      "modal": "diagram"
+      "action": "navigate_page",
+      "path": "pages/how-to-build/step-2-change/config.json"
     },
     {
       "id": "step-3-feedback",
@@ -28,8 +29,8 @@
       "y": 42,
       "width": 22,
       "height": 50,
-      "action": "open_modal",
-      "modal": "diagram"
+      "action": "navigate_page",
+      "path": "pages/how-to-build/step-3-test/config.json"
     },
     {
       "id": "step-4-live",
@@ -38,7 +39,8 @@
       "y": 42,
       "width": 22,
       "height": 50,
-      "action": "navigate_floor"
+      "action": "navigate_page",
+      "path": "pages/how-to-build/step-4-live/config.json"
     }
   ]
 }
