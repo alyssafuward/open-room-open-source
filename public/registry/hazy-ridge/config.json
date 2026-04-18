@@ -1,0 +1,18 @@
+{
+  "room_display_name": "Hazy Ridge",
+  "owner": "afwcoaching-beep",
+  "background_image": "/registry/hazy-ridge/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "door",
+      "label": "← Back to Floor Plan",
+      "x": 44,
+      "y": 88,
+      "width": 12,
+      "height": 10,
+      "action": "navigate_floor"
+    }
+  ]
+}
