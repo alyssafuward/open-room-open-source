@@ -52,7 +52,7 @@ What's your GitHub username? I'll use it to look up your reserved room.
 Then run:
 
 ```bash
-gh issue list --repo alyssafuward/open-room-open-source --label room --search "@their-username"
+gh issue list --repo alyssafuward/open-room-open-source --label room --search "their-username"
 ```
 
 Find the issue that matches their username — it will contain their room ID (e.g. `warm-harbor`). Confirm the room ID with them before moving on.
