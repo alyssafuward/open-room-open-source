@@ -49,13 +49,15 @@ What's your GitHub username? I'll use it to look up your reserved room.
 
 ---
 
+If they don't know what GitHub is or don't remember signing in: explain that the reservation form required a GitHub login, so they do have an account. Ask if they remember the email they used — that can help them recover their username at github.com. Once they have it, continue.
+
 Then run:
 
 ```bash
 gh issue list --repo alyssafuward/open-room-open-source --label room --search "their-username"
 ```
 
-Find the issue that matches their username — it will contain their room ID (e.g. `warm-harbor`). Confirm the room ID with them before moving on.
+Find the issue that matches their username — it will contain their room ID (e.g. `warm-harbor`). Share the direct link to the issue so they can confirm it's theirs, even if they don't remember the room ID. The issue title will show both the room ID and their username.
 
 If no issue is found, they haven't reserved a room yet. Tell them to visit the live site, click **+ Add Room**, fill out the form, and come back — a GitHub issue will be created automatically with their room ID.
 
@@ -94,6 +96,8 @@ Ask for a description of what they plan to do:
 Give me a quick description of what you're planning. A sentence or two is fine — just enough to capture the intent.
 
 ---
+
+If they're vague (e.g. "make it look cool", "I don't know yet"), help them get specific with a follow-up: ask what image or theme they have in mind, or what they'd want someone to see or feel when they walk into their room. Use their answer to write the issue description yourself — don't make them write it.
 
 Create a GitHub issue with their description as the body, note the issue number, then create the branch.
 
