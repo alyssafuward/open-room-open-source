@@ -1,0 +1,50 @@
+{
+  "room_display_name": "The Library",
+  "background_image": "/registry/breezy-hearth/pages/library/library-sub-room.webp",
+  "hide_back_button": true,
+  "hotspots": [
+    {
+      "id": "orb-fuchsia",
+      "label": "YouTube",
+      "x": 13,
+      "y": 30,
+      "width": 8,
+      "height": 15,
+      "action": "open_url",
+      "url": "https://www.youtube.com/@kimdoyal",
+      "hint": true
+    },
+    {
+      "id": "orb-green",
+      "label": "Substack",
+      "x": 80,
+      "y": 30,
+      "width": 8,
+      "height": 15,
+      "action": "open_url",
+      "url": "https://substack.com/@kimdoyal",
+      "hint": true
+    },
+    {
+      "id": "book-left",
+      "label": "SPARK Lab Community",
+      "x": 30,
+      "y": 42,
+      "width": 15,
+      "height": 18,
+      "action": "open_url",
+      "url": "https://www.kimdoyal.com/community",
+      "hint": true
+    },
+    {
+      "id": "book-right",
+      "label": "Exit to Floor Plan",
+      "x": 55,
+      "y": 42,
+      "width": 15,
+      "height": 18,
+      "action": "navigate_floor",
+      "hint": true
+    }
+  ]
+}
