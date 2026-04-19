@@ -30,7 +30,7 @@ If no issue is found, they haven't reserved yet — tell them to visit the live 
 4. **Copy the template** — `cp -r public/registry/_template/ public/registry/their-room-id/`
 5. **Background image** — help them choose or generate one. Landscape images work best. Remind them: JPEG or WebP, max 200KB
 6. **config.json** — fill in room_display_name, owner, and background_image. Ask if they want hotspots or links — both are optional.
-7. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages. Every room needs at least one `navigate_floor` hotspot (their "door")
+7. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages.
 8. **Commit and push** to their fork
 9. **Pull Request** — open a PR from their fork to the main repo. Help them write the description and remind them to attach a screenshot
 
