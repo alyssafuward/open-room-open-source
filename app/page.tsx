@@ -262,11 +262,11 @@ function OpenRoomInner() {
             <div className="text-4xl mb-4">🎉</div>
             <h2 className="text-slate-900 text-2xl font-black tracking-tight mb-1">Congratulations!</h2>
             <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-              You've reserved your room. Here's your room name — your AI will need it.
+              You've reserved your room. Here's your registry id — your AI will need it.
             </p>
 
             <div className="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-5 mb-6 text-center">
-              <p className="text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Your Room Name</p>
+              <p className="text-[10px] uppercase font-black text-indigo-400 tracking-widest mb-2">Your Registry ID</p>
               <p className="text-2xl font-black text-indigo-700 font-mono tracking-tight mb-3">{successRoom.roomId}</p>
               <button
                 onClick={() => navigator.clipboard.writeText(successRoom.roomId)}

@@ -24,7 +24,7 @@ When a Builder starts a session, ask: **"Do you already have your room ID?"**
 3. **Copy the template** — `cp -r public/registry/_template/ public/registry/their-room-id/`
 4. **Background image** — help them choose or generate one. Landscape images work best. Remind them: JPEG or WebP, max 200KB
 5. **config.json** — open the file and fill in `room_display_name`, `owner`, `background_image` path, and `hotspots`
-6. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages. Every room needs at least one `navigate_floor` hotspot (their "door")
+6. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages.
 7. **Commit and push** to their fork
 8. **Pull Request** — open a PR from their fork to the main repo. Help them write the description and remind them to attach a screenshot
 
