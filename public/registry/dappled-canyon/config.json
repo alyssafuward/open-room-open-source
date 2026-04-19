@@ -1,0 +1,8 @@
+{
+  "room_display_name": "Your Room Name",
+  "owner": "your-github-username",
+  "background_image": "/registry/your-room-id/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": []
+}
