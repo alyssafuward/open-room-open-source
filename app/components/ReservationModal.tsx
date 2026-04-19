@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 const ADJECTIVES = [
   'amber', 'breezy', 'bright', 'calm', 'crisp', 'dappled', 'gentle', 'golden',
@@ -50,7 +52,7 @@ export default function ReservationModal({ x, y, onClose, onSuccess }: {
     let roomId = generateRoomId();
     let attempts = 0;
     while (attempts < 10) {
-      const { data: taken } = await supabase
+      const { data: taken } = await supabase!
         .from('rooms')
         .select('id')
         .eq('registry_id', roomId)
@@ -60,7 +62,7 @@ export default function ReservationModal({ x, y, onClose, onSuccess }: {
       attempts++;
     }
 
-    const { data, error: insertError } = await supabase
+    const { data, error: insertError } = await supabase!
       .from('rooms')
       .insert([{
         name: roomId,

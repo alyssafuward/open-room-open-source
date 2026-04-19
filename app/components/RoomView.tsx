@@ -4,7 +4,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import DiagramModal from './DiagramModal';
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
 interface Hotspot {
   id: string;
@@ -81,6 +83,7 @@ export default function RoomView({ onBack, registryId, room }: {
   }, [registryId]);
 
   const requestEdit = async () => {
+    if (!supabase) return;
     setEditLoading(true);
     const { error } = await supabase.functions.invoke('create-edit-issue', {
       body: {
@@ -99,6 +102,7 @@ export default function RoomView({ onBack, registryId, room }: {
 
   const openRegistry = async () => {
     setActiveModal('registry');
+    if (!supabase) return;
     setRegistryLoading(true);
     const { data } = await supabase
       .from('rooms')
@@ -306,18 +310,20 @@ export default function RoomView({ onBack, registryId, room }: {
                   </div>
                 )}
               </div>
-              <div className="mt-3 pt-3 border-t border-slate-100">
-                {editRequested ? (
-                  <p className="text-xs text-center text-green-600 font-bold">Edit task created!</p>
-                ) : (
-                  <button
-                    onClick={() => { setEditError(false); setShowEditModal(true); }}
-                    className="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors"
-                  >
-                    Open a Task
-                  </button>
-                )}
-              </div>
+              {supabase && (
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                  {editRequested ? (
+                    <p className="text-xs text-center text-green-600 font-bold">Edit task created!</p>
+                  ) : (
+                    <button
+                      onClick={() => { setEditError(false); setShowEditModal(true); }}
+                      className="w-full py-2 bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors"
+                    >
+                      Open a Task
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

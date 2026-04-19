@@ -5,8 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import RoomView from './components/RoomView';
 import ReservationModal from './components/ReservationModal';
 import FloorPlanCanvas from './components/FloorPlanCanvas';
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+import LocalPreview from './components/LocalPreview';
 
 const COMMON_ROOM_SLUG = 'common';
 
@@ -14,6 +13,8 @@ function roomSlug(room: any): string | null {
   if (room.grid_x === 0 && room.grid_y === 0) return COMMON_ROOM_SLUG;
   return room.registry_id ?? null;
 }
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 function OpenRoomInner() {
   const router = useRouter();
@@ -172,7 +173,7 @@ function OpenRoomInner() {
 
           const isAdjacent = Array.from(occupied).some(coord => {
             const [ox, oy] = coord.split(',').map(Number);
-            return Math.abs(ox - x) <= 1 && Math.abs(oy - y) <= 1;
+            return (Math.abs(ox - x) + Math.abs(oy - y)) === 1;
           });
 
           return isAdjacent ? (
@@ -302,6 +303,9 @@ function OpenRoomInner() {
 }
 
 export default function OpenRoom() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return <LocalPreview />;
+  }
   return (
     <Suspense fallback={null}>
       <OpenRoomInner />
