@@ -3,16 +3,76 @@
   "owner": "arrawyn",
   "background_image": "/registry/warm-vista/background.jpg",
   "hide_back_button": false,
-  "links": [],
+  "links": [  ],
   "hotspots": [
     {
-      "id": "exit-door",
-      "label": "Exit to Floor Plan",
-      "x": 80,
-      "y": 20,
-      "width": 15,
-      "height": 65,
-      "action": "navigate_floor"
+      "id": "village-square-preview",
+      "label": "Enter the Village Square",
+      "x": 2,
+      "y": 5,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/village-square-preview.jpg"
+        "url": "https://village-square.pages.dev"
+
+    },
+    {
+      "id": "dose-of-wonder",
+      "label": "Dose of Wonder",
+      "x": 22,
+      "y": 5,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/dose-of-wonder.png"
+        "url": "https://caitlinmccoll.substack.com"
+    },
+    {
+      "id": "prompt-and-pen",
+      "label": "The Prompt & The Pen",
+      "x": 42,
+      "y": 5,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/prompt-and-pen.jpg"
+        "url": "https://promptandpen.substack.com"
+
+    },
+    {
+      "id": "essay-whimsy",
+      "label": "Whimsy as Defiance",
+      "x": 2,
+      "y": 53,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/essay-whimsy.jpg"
+        "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance-why-softness-is"
+
+    },
+    {
+      "id": "essay-good-vibes",
+      "label": "Good Vibes Only Is Wrecking People",
+      "x": 22,
+      "y": 53,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/essay-good-vibes.jpg"
+      "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people"
+    },
+    {
+      "id": "essay-running-empty",
+      "label": "Running on Empty — Start Here",
+      "x": 42,
+      "y": 53,
+      "width": 18,
+      "height": 45,
+      "action": "open_image",
+      "image_url": "/registry/warm-vista/essay-running-empty.jpg"
+      "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do" 
     }
   ]
 }
