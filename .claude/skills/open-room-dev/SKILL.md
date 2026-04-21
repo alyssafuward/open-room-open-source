@@ -39,15 +39,27 @@ Welcome to Open Room! What would you like to work on?
 
 ---
 
-## Step 2: Room ID (room work only)
+## Step 2: GitHub username (room work only)
 
 If they chose 1 or 2, ask:
 
 ---
 
-What's your room registry ID? It looks something like `warm-harbor` or `soft-grove`. You would have gotten it when you reserved your spot on the floor plan.
+What's your GitHub username? I'll use it to look up your reserved room.
 
-If you haven't reserved a room yet, visit the live site, click **+ Add Room**, and come back with your ID.
+---
+
+If they don't know what GitHub is or don't remember signing in: explain that the reservation form required a GitHub login, so they do have an account. Ask if they remember the email they used — that can help them recover their username at github.com. Once they have it, continue.
+
+Then run:
+
+```bash
+gh issue list --repo alyssafuward/open-room-open-source --label room --search "their-username"
+```
+
+Find the issue that matches their username — it will contain their room ID (e.g. `warm-harbor`). Share the direct link to the issue so they can confirm it's theirs, even if they don't remember the room ID. The issue title will show both the room ID and their username.
+
+If no issue is found, they haven't reserved a room yet. Tell them to visit the live site, click **+ Add Room**, fill out the form, and come back — a GitHub issue will be created automatically with their room ID.
 
 ---
 
@@ -84,6 +96,8 @@ Ask for a description of what they plan to do:
 Give me a quick description of what you're planning. A sentence or two is fine — just enough to capture the intent.
 
 ---
+
+If they're vague (e.g. "make it look cool", "I don't know yet"), help them get specific with a follow-up: ask what image or theme they have in mind, or what they'd want someone to see or feel when they walk into their room. Use their answer to write the issue description yourself — don't make them write it.
 
 Create a GitHub issue with their description as the body, note the issue number, then create the branch.
 
@@ -166,7 +180,25 @@ git push -u origin <branch-name>
 
 ---
 
-## Step 6: Open a PR
+## Step 6: Safety check before submitting
+
+Before opening a PR, walk them through a quick review. Keep it light and conversational — frame it as a final look, not an audit:
+
+---
+
+Before we submit, let's do a quick once-over:
+
+1. **Links** — if you added any clickable links to your room, do they go where you expect? Anyone who visits your room will be able to click them.
+2. **Background image** — are you comfortable sharing this image publicly? Make sure you have the right to use it (your own photo, AI-generated, or clearly licensed).
+3. **Your name and details** — your GitHub username will appear as the room owner. Does everything look right?
+
+---
+
+If anything looks off, fix it before moving on. Once the PR is merged, the room goes live for everyone.
+
+---
+
+## Step 7: Open a PR
 
 When they're happy with the changes, offer to open a pull request.
 
@@ -182,7 +214,7 @@ Ready to submit? I'll open a pull request to add your changes to the live projec
 gh pr create --title "..." --body "..."
 ```
 
-Return the full PR URL (e.g. `https://github.com/alyssafuward/open-room-open-source/pull/16`) as a clickable link — not just the issue reference. Then walk them through the Vercel approval:
+Return the full PR URL (e.g. `https://github.com/alyssafuward/open-room-open-source/pull/16`) as a clickable link — not just the issue reference. Then walk them through what happens next:
 
 ---
 

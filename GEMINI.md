@@ -6,33 +6,27 @@ You are helping a **Builder** contribute to **Open Room** — a community buildi
 
 They want to design and submit a room. A room is a folder in `public/registry/` with:
 - A background image (`background.jpeg` or `.webp`)
-- A `config.json` with room metadata and optional hotspots (clickable zones)
+- A `config.json` defining hotspots — clickable zones on the image
 
 Once their Pull Request is merged, their room goes live on the floor plan.
 
 ## Onboarding
 
-When a Builder starts a session, ask for their GitHub username, then look up their reserved room:
+When a Builder starts a session, ask: **"Do you already have your room ID?"**
 
-```bash
-gh issue list --label room --search "their-username"
-```
-
-The issue will contain their room ID (e.g. `warm-harbor`). Confirm it with them before moving on.
-
-If no issue is found, they haven't reserved yet — tell them to visit the live site, click **+ Add Room**, and come back. A GitHub issue with their room ID is created automatically when they reserve.
+- **Yes** → go straight to setup (fork, copy template, build)
+- **No** → tell them to visit the live site first, click **+ Add Room**, and reserve their spot. They'll get a room ID (e.g. `warm-harbor`) that becomes their folder name. A GitHub issue is automatically opened when they reserve — they can find it with `gh issue list --label room`.
 
 ## The setup flow (handle all of this yourself)
 
 1. **Fork** — confirm they've forked `github.com/alyssafuward/open-room-open-source` to their GitHub account
 2. **Clone** — clone their fork locally
-3. **Create a feature branch** - Immediately after confirming the room ID, look up the issue number from the `gh issue list` output and create the branch as room/ISSUE_NUMBER-room-id (e.g. room/101-dappled-canyon) before doing any other git work. 
-4. **Copy the template** — `cp -r public/registry/_template/ public/registry/their-room-id/`
-5. **Background image** — help them choose or generate one. Landscape images work best. Remind them: JPEG or WebP, max 200KB
-6. **config.json** — fill in room_display_name, owner, and background_image. Ask if they want hotspots or links — both are optional.
-7. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages.
-8. **Commit and push** — before running, explain: "I'm going to save your work and send it up to GitHub. Think of a commit as hitting Save, and a push as uploading it." Then commit and push to their fork.
-9. **Pull Request** — before opening, explain: "A Pull Request is how you propose your room to the project. Once it's reviewed and merged, your room goes live." Then open a PR from their fork to the main repo. Help them write the description and remind them to attach a screenshot.
+3. **Copy the template** — `cp -r public/registry/_template/ public/registry/their-room-id/`
+4. **Background image** — help them choose or generate one. Landscape images work best. Remind them: JPEG or WebP, max 200KB
+5. **config.json** — open the file and fill in `room_display_name`, `owner`, `background_image` path, and `hotspots`
+6. **Hotspot positioning** — look at their background image and estimate x/y/width/height as percentages.
+7. **Commit and push** to their fork
+8. **Pull Request** — open a PR from their fork to the main repo. Help them write the description and remind them to attach a screenshot
 
 ## No database setup needed
 
@@ -81,7 +75,7 @@ If a Builder wants to update their room after it's already live, they use the **
 
 To find open edit tasks for a specific builder:
 ```
-gh issue list --label room --search "github-username"
+gh issue list --label room --search "(@github-username)"
 ```
 
 Once a task issue is open, the Builder forks the repo, makes their changes to `public/registry/their-room-id/`, and opens a Pull Request referencing the issue.
@@ -89,6 +83,5 @@ Once a task issue is open, the Builder forks the repo, makes their changes to `p
 ## The vibe
 
 - Handle technical tasks yourself — don't ask the Builder to run commands you can run
-- Before each git action (branch, commit, push, pull request), say in one plain sentence what it does and why — then run it. Never execute silently.
 - Use correct terms (Fork, Branch, Pull Request) so they learn, but don't make them do the work
 - Keep it encouraging — this is a creative project, not a technical exam

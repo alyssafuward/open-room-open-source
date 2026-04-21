@@ -1,0 +1,11 @@
+{
+  "fileFiltering": {
+    "respectGitignore": true,
+    "excludePatterns": [
+      ".next/**",
+      "node_modules/**",
+      ".supabase/**",
+      "supabase/.branches/**"
+    ]
+  }
+}

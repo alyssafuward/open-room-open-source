@@ -1,0 +1,21 @@
+{
+  "room_display_name": "Woven Window",
+  "owner": "Insight727",
+  "background_image": "/registry/woven-window/background.jpeg",
+  "hide_back_button": false,
+  "links": [
+    { "label": "Served Podcast", "url": "https://servedpodcast.com/" }
+  ],
+  "hotspots": [
+    {
+      "id": "andy-roddick",
+      "label": "Andy Roddick",
+      "x": 2,
+      "y": 2,
+      "width": 15,
+      "height": 25,
+      "action": "open_image",
+      "image_url": "/registry/woven-window/andy-roddick.jpeg"
+    }
+  ]
+}
