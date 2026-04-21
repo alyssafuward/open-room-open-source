@@ -1,0 +1,53 @@
+{
+  "room_display_name": "The SPARK Sanctum",
+  "owner": "kimdoyal",
+  "background_image": "/registry/breezy-hearth/background.webp",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "bookshelf",
+      "label": "The Library",
+      "x": 0,
+      "y": 15,
+      "width": 12,
+      "height": 70,
+      "action": "navigate_page",
+      "path": "pages/library/config.json",
+      "hint": true
+    },
+    {
+      "id": "fireplace",
+      "label": "SPARK Newsletter",
+      "x": 38,
+      "y": 35,
+      "width": 18,
+      "height": 45,
+      "action": "open_url",
+      "url": "https://kimdoyal.substack.com/",
+      "hint": true
+    },
+    {
+      "id": "tapestry",
+      "label": "Inside My 33-Agent AI Operating System",
+      "x": 63,
+      "y": 10,
+      "width": 15,
+      "height": 45,
+      "action": "open_url",
+      "url": "https://kimdoyal.substack.com/p/inside-my-33-agent-ai-operating-system",
+      "hint": true
+    },
+    {
+      "id": "apothecary-table",
+      "label": "The Apothecary",
+      "x": 82,
+      "y": 35,
+      "width": 18,
+      "height": 50,
+      "action": "navigate_page",
+      "path": "pages/apothecary/config.json",
+      "hint": true
+    }
+  ]
+}
