@@ -88,13 +88,15 @@ Once a task issue is open, the Builder forks the repo, makes their changes to `p
 
 ## Launching locally
 
-After making changes, offer to launch a local preview so the Builder can see their room before opening a PR:
+After making changes, offer to launch a local preview so the Builder can see their room before opening a PR. Run this from their cloned fork (no `.env` or Supabase config needed):
 
 ```bash
-cd ~/src/open-room-open-source && npm run dev
+cd ~/src/<their-fork-folder> && npm run dev
 ```
 
 Then tell them: "I've started a local preview — open http://localhost:3000 to see your room."
+
+The local preview auto-detects rooms in `public/registry/` and highlights the one matching the current branch. If only one room exists it redirects straight to it.
 
 If a server is already running it will print the active port (e.g. 3002) — use that instead.
 
