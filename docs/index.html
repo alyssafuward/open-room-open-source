@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Room · Guide Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;1,300;1,500&family=Instrument+Sans:wght@400;500&display=swap');
+  :root {
+    --bg:#f2ede4;--surface:#faf8f3;--border:#e0d8ca;--ink:#1c1814;--muted:#9a8e7e;--accent:#d96830;
+    --c1:#d96830;--c2:#7aab5e;--c3:#5e8eab;--c4:#d9a030;--c5:#ab5e8e;--c6:#5eab8e;--c7:#8e5eab;--c8:#d96830;--c9:#5e8eab;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;height:100vh;display:flex;overflow:hidden;}
+
+  /* Sidebar */
+  .sidebar{width:210px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;padding:28px 0 24px;background:var(--surface);overflow-y:auto;}
+  .sidebar-logo{padding:0 20px 22px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+  .sidebar-logo-name{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--ink);line-height:1.2;}
+  .sidebar-logo-name em{color:var(--accent);font-style:italic;}
+  .sidebar-logo-sub{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;}
+  .sidebar-section{padding:0 12px;margin-bottom:4px;}
+  .sidebar-section-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 8px;margin-bottom:6px;}
+  .nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;color:var(--muted);font-family:'Instrument Sans',sans-serif;font-size:12px;transition:all .15s;text-decoration:none;}
+  .nav-item:hover{background:var(--bg);color:var(--ink);}
+  .nav-item.active{background:#fdeee6;color:var(--accent);}
+  .nav-num{font-size:10px;color:var(--border);width:14px;flex-shrink:0;font-family:'Fraunces',serif;transition:color .15s;}
+  .nav-item:hover .nav-num,.nav-item.active .nav-num{color:var(--accent);}
+  .nav-divider{height:1px;background:var(--border);margin:10px 12px;}
+  .nav-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;color:var(--muted);font-size:12px;text-decoration:none;transition:all .15s;font-family:'Instrument Sans',sans-serif;}
+  .nav-link:hover{background:var(--bg);color:var(--accent);}
+  .nav-link-arrow{margin-left:auto;font-size:10px;opacity:.4;}
+
+  /* Main */
+  .main{flex:1;overflow-y:auto;padding:44px 48px 56px;}
+  .main-header{margin-bottom:32px;}
+  .main-eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .main-title{font-family:'Fraunces',serif;font-size:clamp(26px,3.5vw,40px);font-weight:300;color:var(--ink);line-height:1.1;}
+  .main-title em{color:var(--accent);font-style:italic;}
+  .main-sub{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.6;}
+
+  /* Tiles */
+  .tile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .tile{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:22px 22px 18px;cursor:pointer;transition:all .18s ease;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;min-height:148px;text-decoration:none;color:inherit;}
+  .tile:hover{border-color:var(--tile-c);background:white;transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.09);}
+  .tile-stripe{position:absolute;top:0;left:0;right:0;height:3px;background:var(--tile-c);border-radius:14px 14px 0 0;opacity:0;transition:opacity .18s;}
+  .tile:hover .tile-stripe{opacity:1;}
+  .tile-num{font-family:'Fraunces',serif;font-size:10px;font-weight:300;color:var(--muted);letter-spacing:.1em;}
+  .tile-icon{font-size:24px;line-height:1;}
+  .tile-title{font-family:'Fraunces',serif;font-size:16px;font-weight:300;color:var(--ink);line-height:1.3;flex:1;}
+  .tile-arrow{font-size:11px;color:var(--muted);opacity:0;transform:translateX(-4px);transition:all .15s;align-self:flex-end;}
+  .tile:hover .tile-arrow{opacity:1;transform:translateX(0);color:var(--tile-c);}
+  .tile-ghost{position:absolute;bottom:-12px;right:8px;font-family:'Fraunces',serif;font-size:68px;font-weight:300;color:rgba(0,0,0,.035);line-height:1;pointer-events:none;user-select:none;}
+  .tile{animation:tileIn .35s ease both;}
+  @keyframes tileIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .tile:nth-child(1){animation-delay:.04s}.tile:nth-child(2){animation-delay:.09s}.tile:nth-child(3){animation-delay:.14s}
+  .tile:nth-child(4){animation-delay:.19s}.tile:nth-child(5){animation-delay:.24s}.tile:nth-child(6){animation-delay:.29s}
+  .tile:nth-child(7){animation-delay:.34s}.tile:nth-child(8){animation-delay:.39s}.tile:nth-child(9){animation-delay:.44s}
+
+  /* Modal */
+  .panel-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(28,24,20,.4);align-items:center;justify-content:center;padding:20px;}
+  .panel-overlay.open{display:flex;animation:fadeIn .15s ease;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .panel{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,.16);width:100%;max-width:760px;max-height:90vh;overflow-y:auto;position:relative;animation:panelUp .22s ease;}
+  @keyframes panelUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .panel-top{padding:32px 36px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);border-radius:20px 20px 0 0;display:flex;align-items:flex-start;gap:16px;}
+  .panel-top-icon{font-size:34px;flex-shrink:0;margin-top:3px;}
+  .panel-top-text{flex:1;}
+  .panel-eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+  .panel-title{font-family:'Fraunces',serif;font-size:30px;font-weight:300;color:var(--ink);line-height:1.15;}
+  .panel-close{background:none;border:1.5px solid var(--border);font-size:16px;cursor:pointer;color:var(--muted);line-height:1;padding:6px 10px;border-radius:8px;flex-shrink:0;transition:all .15s;}
+  .panel-close:hover{color:var(--ink);border-color:var(--ink);background:var(--bg);}
+  .panel-body{padding:28px 36px 36px;}
+  .panel-points{display:flex;flex-direction:column;gap:20px;}
+  .panel-point{display:flex;gap:14px;align-items:flex-start;}
+  .point-dot{width:7px;height:7px;border-radius:50%;margin-top:9px;flex-shrink:0;}
+  .point-text{font-size:15px;line-height:1.72;color:#3a3330;}
+  .point-text strong{color:var(--ink);font-weight:500;}
+  .point-text code{background:var(--bg);padding:2px 7px;border-radius:4px;font-size:13px;font-family:monospace;}
+  .panel-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+  .panel-chip{font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:5px 14px;color:var(--muted);}
+
+  /* Diagrams shared */
+  .diagram-section{margin-top:28px;padding-top:24px;border-top:1px solid var(--border);}
+  .diagram-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+
+  /* Git flow diagram */
+  .git-flow{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:28px 24px 20px;font-size:13px;}
+  .gf-row{display:flex;align-items:center;gap:0;flex-wrap:nowrap;}
+  .gf-box{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 14px;border-radius:10px;border:1.5px solid;min-width:108px;flex-shrink:0;}
+  .gf-icon{font-size:20px;margin-bottom:4px;}
+  .gf-name{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+  .gf-sub{font-size:10px;color:var(--muted);line-height:1.4;}
+  .gf-arrow{display:flex;flex-direction:column;align-items:center;padding:0 8px;flex-shrink:0;}
+  .gf-arrow-word{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+  .gf-arrow-sym{font-size:18px;color:#bbb;}
+  .gf-vconnect{display:flex;flex-direction:column;align-items:center;margin:0 auto;padding-left:8px;}
+  .gf-vline{width:2px;background:var(--border);height:22px;}
+  .gf-vmid{font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:3px 8px;background:white;border:1px solid var(--border);border-radius:999px;white-space:nowrap;}
+  .gf-defs{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
+  .gf-def{font-size:11px;background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:#555;line-height:1.5;flex:1;min-width:160px;}
+  .gf-def strong{color:var(--ink);display:block;margin-bottom:2px;}
+
+  /* Branch diagram SVG */
+  .branch-diagram{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:24px;overflow-x:auto;}
+
+  /* Ecosystem diagram */
+  .eco-flow{display:flex;flex-direction:column;gap:10px;}
+  .eco-row{display:flex;align-items:center;gap:0;}
+  .eco-card{display:flex;align-items:flex-start;gap:12px;background:white;border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;flex:1;transition:border-color .15s;}
+  .eco-card:hover{border-color:var(--eco-c);}
+  .eco-icon{font-size:22px;flex-shrink:0;}
+  .eco-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+  .eco-role{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--eco-c,var(--muted));margin-bottom:4px;}
+  .eco-desc{font-size:12px;color:var(--muted);line-height:1.55;}
+  .eco-connector{display:flex;align-items:center;justify-content:center;gap:0;padding:0 16px;}
+  .eco-arrow-line{height:2px;width:28px;background:var(--border);}
+  .eco-arrow-head{font-size:14px;color:var(--border);margin-left:-4px;}
+  .eco-connector-v{display:flex;flex-direction:column;align-items:flex-start;padding:0 0 0 54px;}
+  .eco-vline{width:2px;height:18px;background:var(--border);}
+
+  /* Terminal animation */
+  .terminal{background:#1a1814;border-radius:12px;overflow:hidden;font-family:'Courier New',monospace;box-shadow:0 8px 32px rgba(0,0,0,.25);}
+  .terminal-bar{background:#2a2520;padding:10px 16px;display:flex;align-items:center;gap:8px;}
+  .term-dot{width:12px;height:12px;border-radius:50%;}
+  .term-title{font-size:11px;color:#6a5e4e;margin-left:8px;letter-spacing:.05em;}
+  .terminal-body{padding:20px 22px;min-height:260px;font-size:13px;line-height:1.7;}
+  .term-line{display:flex;gap:8px;margin-bottom:2px;}
+  .term-prompt{color:#d9a030;flex-shrink:0;}
+  .term-input{color:#f0ead8;}
+  .term-output{color:#8a9e6a;padding-left:4px;}
+  .term-output.dim{color:#5a5040;}
+  .term-output.orange{color:#d9a030;}
+  .term-output.blue{color:#7ab5c9;}
+  .term-cursor{display:inline-block;width:8px;height:14px;background:#d9a030;animation:blink 1s infinite;vertical-align:middle;margin-left:2px;}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+  /* Slideshow */
+  .slideshow{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .slideshow-img{display:none;width:100%;height:auto;border-radius:12px;}
+  .slideshow-img.active{display:block;}
+  .slideshow-controls{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);border-top:1px solid var(--border);}
+  .slideshow-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--muted);transition:all .15s;font-family:'Instrument Sans',sans-serif;}
+  .slideshow-btn:hover:not(:disabled){border-color:var(--ink);color:var(--ink);}
+  .slideshow-btn:disabled{opacity:.3;cursor:default;}
+  .slideshow-counter{font-size:11px;color:var(--muted);font-family:'Instrument Sans',sans-serif;}
+  .slideshow-dots{display:flex;gap:5px;align-items:center;}
+  .slideshow-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .15s;}
+  .slideshow-dot.active{background:var(--accent);}
+
+  /* Pull request name explanation box */
+  .pr-explain{background:#fff8f0;border:1px solid #f5d0a0;border-radius:10px;padding:14px 18px;margin-top:16px;font-size:13px;color:#5a3a10;line-height:1.65;}
+  .pr-explain strong{color:#8a4a10;}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name"><em>Open</em> Room</div>
+    <div class="sidebar-logo-sub">Builder's Guide</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Topics</div>
+    <button class="nav-item active"><span class="nav-num">—</span><span>🗺️</span><span>Map overview</span></button>
+    <button class="nav-item" onclick="openPanel(1)"><span class="nav-num">1</span><span>🏠</span><span>What is Open Room</span></button>
+    <button class="nav-item" onclick="openPanel(2)"><span class="nav-num">2</span><span>💡</span><span>Why this matters</span></button>
+    <button class="nav-item" onclick="openPanel(3)"><span class="nav-num">3</span><span>🔓</span><span>What is open source</span></button>
+    <button class="nav-item" onclick="openPanel(4)"><span class="nav-num">4</span><span>🐙</span><span>How GitHub works</span></button>
+    <button class="nav-item" onclick="openPanel(5)"><span class="nav-num">5</span><span>🔨</span><span>The build process</span></button>
+    <button class="nav-item" onclick="openPanel(6)"><span class="nav-num">6</span><span>⚙️</span><span>Dev ecosystem</span></button>
+    <button class="nav-item" onclick="openPanel(7)"><span class="nav-num">7</span><span>🧪</span><span>How to test</span></button>
+    <button class="nav-item" onclick="openPanel(8)"><span class="nav-num">8</span><span>🤖</span><span>Using Claude Code</span></button>
+    <button class="nav-item" onclick="openPanel(9)"><span class="nav-num">9</span><span>💎</span><span>Using Gemini CLI</span></button>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Links</div>
+    <a class="nav-link" href="https://open-room-open-source.vercel.app/" target="_blank"><span>🌐</span><span>Open Room app</span><span class="nav-link-arrow">↗</span></a>
+    <a class="nav-link" href="https://github.com/alyssafuward/open-room-open-source" target="_blank"><span>🐙</span><span>GitHub repo</span><span class="nav-link-arrow">↗</span></a>
+    <a class="nav-link" href="https://alyssafuward.substack.com/p/if-my-70-year-old-mother-and-my-almost" target="_blank"><span>📝</span><span>Origin article</span><span class="nav-link-arrow">↗</span></a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="main-header">
+    <div class="main-eyebrow">Open Room · Builder's Guide</div>
+    <div class="main-title">What we're<br>covering <em>today.</em></div>
+    <div class="main-sub">Select a topic to explore — or start from the top and work through each one.</div>
+  </div>
+  <div class="tile-grid">
+    <div class="tile" style="--tile-c:var(--c1)" onclick="openPanel(1)"><div class="tile-stripe"></div><div class="tile-num">01</div><div class="tile-icon">🏠</div><div class="tile-title">What is Open Room</div><div class="tile-arrow">→</div><div class="tile-ghost">1</div></div>
+    <div class="tile" style="--tile-c:var(--c2)" onclick="openPanel(2)"><div class="tile-stripe"></div><div class="tile-num">02</div><div class="tile-icon">💡</div><div class="tile-title">Why is this important</div><div class="tile-arrow">→</div><div class="tile-ghost">2</div></div>
+    <div class="tile" style="--tile-c:var(--c3)" onclick="openPanel(3)"><div class="tile-stripe"></div><div class="tile-num">03</div><div class="tile-icon">🔓</div><div class="tile-title">What is open source</div><div class="tile-arrow">→</div><div class="tile-ghost">3</div></div>
+    <div class="tile" style="--tile-c:var(--c4)" onclick="openPanel(4)"><div class="tile-stripe"></div><div class="tile-num">04</div><div class="tile-icon">🐙</div><div class="tile-title">How GitHub works</div><div class="tile-arrow">→</div><div class="tile-ghost">4</div></div>
+    <div class="tile" style="--tile-c:var(--c5)" onclick="openPanel(5)"><div class="tile-stripe"></div><div class="tile-num">05</div><div class="tile-icon">🔨</div><div class="tile-title">The build process</div><div class="tile-arrow">→</div><div class="tile-ghost">5</div></div>
+    <div class="tile" style="--tile-c:var(--c6)" onclick="openPanel(6)"><div class="tile-stripe"></div><div class="tile-num">06</div><div class="tile-icon">⚙️</div><div class="tile-title">What is the development ecosystem</div><div class="tile-arrow">→</div><div class="tile-ghost">6</div></div>
+    <div class="tile" style="--tile-c:var(--c7)" onclick="openPanel(7)"><div class="tile-stripe"></div><div class="tile-num">07</div><div class="tile-icon">🧪</div><div class="tile-title">How to test the app</div><div class="tile-arrow">→</div><div class="tile-ghost">7</div></div>
+    <div class="tile" style="--tile-c:var(--c8)" onclick="openPanel(8)"><div class="tile-stripe"></div><div class="tile-num">08</div><div class="tile-icon">🤖</div><div class="tile-title">Using Claude Code</div><div class="tile-arrow">→</div><div class="tile-ghost">8</div></div>
+    <div class="tile" style="--tile-c:var(--c9)" onclick="openPanel(9)"><div class="tile-stripe"></div><div class="tile-num">09</div><div class="tile-icon">💎</div><div class="tile-title">Using Gemini CLI</div><div class="tile-arrow">→</div><div class="tile-ghost">9</div></div>
+  </div>
+</div>
+
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel(event)">
+  <div class="panel" id="panel">
+    <div class="panel-top">
+      <div class="panel-top-icon" id="panelIcon"></div>
+      <div class="panel-top-text">
+        <div class="panel-eyebrow" id="panelEyebrow"></div>
+        <div class="panel-title" id="panelTitle"></div>
+      </div>
+      <button class="panel-close" onclick="closePanel()">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-points" id="panelPoints"></div>
+      <div id="panelDiagram"></div>
+      <div class="panel-chips" id="panelChips"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* ── Diagram HTML strings ── */
+
+const GIT_DIAGRAM = `
+
+<div class="diagram-section">
+  <div class="diagram-label">How GitHub works — step by step</div>
+  <div class="slideshow" id="githubSlideshow">
+    <img class="slideshow-img active" src="./github-slide-01.png" alt="Slide 1">
+    <img class="slideshow-img" src="./github-slide-02.png" alt="Slide 2">
+    <img class="slideshow-img" src="./github-slide-03.png" alt="Slide 3">
+    <img class="slideshow-img" src="./github-slide-04.png" alt="Slide 4">
+    <img class="slideshow-img" src="./github-slide-05.png" alt="Slide 5">
+    <img class="slideshow-img" src="./github-slide-06.png" alt="Slide 6">
+    <img class="slideshow-img" src="./github-slide-07.png" alt="Slide 7">
+    <img class="slideshow-img" src="./github-slide-08.png" alt="Slide 8">
+    <img class="slideshow-img" src="./github-slide-09.png" alt="Slide 9">
+    <div class="slideshow-controls">
+      <button class="slideshow-btn" id="slidePrev" onclick="slideMove(-1)" disabled>← Back</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div class="slideshow-dots" id="slideDots"></div>
+        <span class="slideshow-counter" id="slideCounter">1 / 9</span>
+      </div>
+      <button class="slideshow-btn" id="slideNext" onclick="slideMove(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div class="diagram-section">
+  <div class="diagram-label">How branches work</div>
+  <div class="branch-diagram">
+    <svg viewBox="0 0 580 140" width="100%" style="display:block;overflow:visible">
+      <!-- Main branch line -->
+      <line x1="30" y1="48" x2="550" y2="48" stroke="#d9a030" stroke-width="2.5"/>
+      <!-- Main branch commits -->
+      <circle cx="30" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <circle cx="110" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <circle cx="200" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <circle cx="290" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <circle cx="430" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <circle cx="550" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
+      <!-- Main label -->
+      <text x="30" y="24" text-anchor="middle" font-size="11" fill="#9a8e7e" font-family="Instrument Sans, sans-serif" letter-spacing="1" font-weight="500">MAIN BRANCH</text>
+      <text x="30" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">abc</text>
+      <text x="110" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">def</text>
+      <text x="200" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">123</text>
+      <text x="290" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">456</text>
+      <text x="430" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">789</text>
+      <text x="550" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">792</text>
+      <!-- PUSH label at 792 -->
+      <text x="550" y="22" text-anchor="middle" font-size="10" fill="#ab5e8e" font-family="Instrument Sans, sans-serif" font-weight="500">PUSH + PR</text>
+      <line x1="550" y1="26" x2="550" y2="38" stroke="#ab5e8e" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+      <!-- Feature branch curve out from commit 200 -->
+      <path d="M 200 48 Q 230 48 250 80 L 370 80" fill="none" stroke="#5e8eab" stroke-width="2.5"/>
+      <!-- Feature rejoins at 430 -->
+      <path d="M 370 80 Q 400 80 430 48" fill="none" stroke="#5e8eab" stroke-width="2.5" stroke-dasharray="5,3"/>
+      <!-- Feature commits -->
+      <circle cx="250" cy="80" r="7" fill="#5e8eab" stroke="white" stroke-width="2"/>
+      <circle cx="310" cy="80" r="7" fill="#5e8eab" stroke="white" stroke-width="2"/>
+      <circle cx="370" cy="80" r="7" fill="#5e8eab" stroke="white" stroke-width="2"/>
+      <!-- Feature label -->
+      <text x="310" y="108" text-anchor="middle" font-size="11" fill="#5e8eab" font-family="Instrument Sans, sans-serif" letter-spacing="1" font-weight="500">FEATURE BRANCH</text>
+      <text x="250" y="100" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">c1</text>
+      <text x="310" y="100" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">c2</text>
+      <text x="370" y="100" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">c3</text>
+      <!-- Merge arrow label -->
+      <text x="415" y="76" text-anchor="middle" font-size="9" fill="#7aab5e" font-family="Instrument Sans, sans-serif">merge</text>
+    </svg>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+      <div style="font-size:11px;color:var(--muted);background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;line-height:1.5;flex:1;min-width:200px">
+        <strong style="color:var(--ink);display:block;margin-bottom:2px">🌿 Feature branch</strong>
+        A copy of the main branch (or another branch) where you make your changes safely. When done, you open a PR to merge it back in. In Open Room, builders work on their fork's main branch — same idea, just at the repo level instead of within a repo.
+      </div>
+      <div style="font-size:11px;color:var(--muted);background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;line-height:1.5;flex:1;min-width:200px">
+        <strong style="color:var(--ink);display:block;margin-bottom:2px">⚪ Commit</strong>
+        Each circle on the timeline is a commit — a saved snapshot of your changes at a point in time. Commits build up as you work, giving you a full history of everything that changed.
+      </div>
+    </div>
+  </div>
+</div>`;
+
+const ECO_DIAGRAM = `
+<div class="diagram-section">
+  <div class="diagram-label">How the pieces connect</div>
+  <div class="eco-flow">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="eco-card" style="--eco-c:#d9a030">
+        <div class="eco-icon">🐙</div>
+        <div>
+          <div class="eco-role">Code storage</div>
+          <div class="eco-name">GitHub</div>
+          <div class="eco-desc">Where all the code lives. Every change is tracked here. The starting point for everything.</div>
+        </div>
+      </div>
+      <div class="eco-card" style="--eco-c:#5e8eab">
+        <div class="eco-icon">🌐</div>
+        <div>
+          <div class="eco-role">Hosting</div>
+          <div class="eco-name">Vercel</div>
+          <div class="eco-desc">Watches GitHub. When new code is merged, Vercel automatically deploys it as the live public website.</div>
+        </div>
+      </div>
+      <div class="eco-card" style="--eco-c:#8e5eab">
+        <div class="eco-icon">💻</div>
+        <div>
+          <div class="eco-role">Local preview</div>
+          <div class="eco-name">Localhost</div>
+          <div class="eco-desc">Your own machine running the app privately. For testing changes before anything is pushed to GitHub.</div>
+        </div>
+      </div>
+      <div class="eco-card" style="--eco-c:#7aab5e">
+        <div class="eco-icon">🗄️</div>
+        <div>
+          <div class="eco-role">Database</div>
+          <div class="eco-name">Supabase</div>
+          <div class="eco-desc">Stores the room data — positions, metadata — that powers the live grid. The live site reads from here; localhost does not.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--muted);line-height:1.65;">
+      <strong style="color:var(--ink)">The flow:</strong> You write code locally (<strong>Localhost</strong>) → push to <strong>GitHub</strong> → <strong>Vercel</strong> auto-deploys the live site → the live site reads room data from <strong>Supabase</strong>.
+    </div>
+  </div>
+</div>`;
+
+const TERMINAL_DEMO = `
+<div class="diagram-section">
+  <div class="diagram-label">What it looks like in practice</div>
+  <div class="terminal" id="terminalDemo">
+    <div class="terminal-bar">
+      <div class="term-dot" style="background:#ff5f57"></div>
+      <div class="term-dot" style="background:#febc2e"></div>
+      <div class="term-dot" style="background:#28c840"></div>
+      <div class="term-title">Terminal — Claude Code</div>
+    </div>
+    <div class="terminal-body" id="termBody">
+      <div class="term-line"><span class="term-output dim">Waiting for conversation to start...</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center">This is a replay of a typical Claude Code session for Open Room</div>
+</div>`;
+
+/* ── Panel data ── */
+const PANELS = {
+  1: {
+    icon:"🏠",title:"What is Open Room",color:"#d96830",
+    points:[
+      "<strong>A community-driven creative space.</strong> Open Room is a social, infinite building space where anyone can reserve a room and make it their own.",
+      "<strong>Your room, your vision.</strong> Builders decide what their room looks like and what it contains — no templates, no rules.",
+      "<strong>Built with AI.</strong> Rooms are created using Claude Code or Gemini CLI, so you don't need a technical background to build something real.",
+      "<strong>Infinite space.</strong> There's no cap on how many rooms can exist — the space grows as the community does."
+    ],
+    chips:["Community-driven","AI-assisted","Open to anyone"]
+  },
+  2: {
+    icon:"💡",title:"Why is this important",color:"#7aab5e",
+    points:[
+      "<strong>No technical background required.</strong> AI has changed what's possible — anyone can build a real technical product with the right support.",
+      "<strong>Building together is the next level.</strong> It's one thing to build alone. Open Room is about what becomes possible when we build alongside each other.",
+      "<strong>Best practices still matter.</strong> Even with AI doing the heavy lifting, engineering conventions are worth knowing — and you can learn them here, at your own pace.",
+      "<strong>A warm, welcoming space.</strong> Open Room is intentionally designed to feel safe and exploratory, not high-stakes or intimidating."
+    ],
+    chips:["Accessible","Collaborative","Learning-first"]
+  },
+  3: {
+    icon:"🔓",title:"What is open source",color:"#5e8eab",
+    points:[
+      "<strong>Code developed in public, together.</strong> Open source means the code is visible to everyone — and anyone can contribute to it.",
+      "<strong>Changes happen through tickets.</strong> Suggestions, fixes, and new rooms are all proposed through GitHub issues — the same system your room reservation uses.",
+      "<strong>Messy by design.</strong> Open source projects are living, imperfect things. That's not a bug — that's what makes them ours.",
+      "<strong>You're building something real.</strong> Every room added is a genuine contribution to a shared, evolving project."
+    ],
+    chips:["Public code","Community contributions","GitHub issues"]
+  },
+  4: {
+    icon:"🐙",title:"How GitHub works",color:"#d9a030",
+    points:[
+      "<strong>Version control.</strong> GitHub tracks every change to a codebase — what changed, when, and by whom. Nothing is ever truly lost.",
+      "<strong>Repository.</strong> A repo holds everything: all the files, the full history of changes, the issues (tickets), and the pull requests. Think of it as the house the project lives in.",
+      "<strong>Fork.</strong> Your personal copy of someone else's repo, in your own GitHub account. You make all your changes here.",
+      "<strong>Clone.</strong> Downloading your fork from GitHub to your local computer so Claude Code can edit files directly on your machine.",
+      "<strong>Main branch.</strong> Every repo has a main branch — the live, published version of the code. It's the source of truth.",
+      "<strong>Feature branch.</strong> A copy of the main branch where you make changes safely. When done, you open a pull request to merge it back in.",
+      "<strong>Pull Request (PR).</strong> A formal ask for the maintainer to pull your changes into the base repo. You push your work, they review and approve."
+    ],
+    diagram: GIT_DIAGRAM,
+    chips:["Repository","Fork","Clone","Main branch","Feature branch","Pull Request","Commit"]
+  },
+  5: {
+    icon:"🔨",title:"The build process",color:"#ab5e8e",
+    points:[
+      "<strong>Step 1 — Reserve a room.</strong> Go to the Open Room site and claim your spot. You'll receive a unique two-word room ID.",
+      "<strong>Step 2 — Develop.</strong> Give Claude Code or Gemini CLI the repo URL. It will guide you through forking, cloning, and making your first change — like adding a background image.",
+      "<strong>Step 3 — Check your work.</strong> Preview the change locally (localhost) to make sure it looks right before sharing.",
+      "<strong>Step 4 — Submit for review.</strong> Your AI tool creates a pull request. The maintainer reviews, approves, and your room goes live."
+    ],
+    chips:["Reserve","Develop","Review","Live"]
+  },
+  6: {
+    icon:"⚙️",title:"The development ecosystem",color:"#5eab8e",
+    points:[
+      "<strong>GitHub</strong> — Where the code lives. Every change is tracked here.",
+      "<strong>Vercel</strong> — The host. Watches GitHub and auto-deploys the live site when new code is merged.",
+      "<strong>Supabase</strong> — The database. Stores the room data that powers the grid on the live site.",
+      "<strong>Localhost</strong> — Your local preview. Lets you test the app on your own machine before anything is public."
+    ],
+    diagram: ECO_DIAGRAM,
+    chips:["GitHub","Vercel","Supabase","Localhost"]
+  },
+  7: {
+    icon:"🧪",title:"How to test the app",color:"#8e5eab",
+    points:[
+      "<strong>Local testing (localhost).</strong> Run the app on your own machine to preview changes. Fast and private — but not connected to the live database, so the room grid won't look like the real site.",
+      "<strong>Remote preview (Vercel).</strong> After submitting a pull request, Vercel spins up a preview much closer to the real thing. Requires maintainer approval before it loads.",
+      "<strong>When to use which.</strong> Use localhost to check that your room looks right. Use Vercel preview to verify everything works end-to-end before going live."
+    ],
+    chips:["localhost","Vercel preview","Maintainer approval"]
+  },
+  8: {
+    icon:"🤖",title:"Using Claude Code",color:"#d96830",
+    points:[
+      "<strong>What is a terminal?</strong> The terminal (also called the command line) is a text-based window where you type instructions directly to your computer. Instead of clicking icons, you type commands. Claude Code runs inside the terminal.",
+      "<strong>How to start.</strong> Open your terminal, type <code>claude</code> and press Enter. Claude Code will start and wait for your instructions.",
+      "<strong>Talk to it naturally.</strong> No special syntax needed. Tell Claude Code what you want in plain English — <em>\"I want to add a background image to my room.\"</em> It figures out the steps.",
+      "<strong>Give it the repo link.</strong> To work on Open Room, paste the GitHub URL and say what you need help with. Claude Code reads the repo and guides you from there.",
+      "<strong>It asks before it acts.</strong> Claude Code proposes changes and waits for your approval. Read what it plans, then confirm. You stay in control.",
+      "<strong>Ask it to explain anything.</strong> If you don't understand a term, a command, or a file — just ask. <em>\"What does that mean?\"</em> is always a valid thing to say."
+    ],
+    diagram: TERMINAL_DEMO,
+    chips:["Terminal","Plain English","Approval-based","Asks questions"]
+  },
+  9: {
+    icon:"💎",title:"Using Gemini CLI",color:"#5e8eab",
+    points:[
+      "<strong>What is Gemini CLI?</strong> Google's AI coding assistant that runs in the terminal — same concept as Claude Code, powered by Google's Gemini model.",
+      "<strong>How to start.</strong> Open your terminal and type <code>gemini</code>. If installed, it launches and waits for your prompt.",
+      "<strong>Same idea, different AI.</strong> Give it instructions in plain English, point it at the Open Room repo, and describe what you want to build.",
+      "<strong>Large context window.</strong> Gemini CLI can hold a lot of code in mind at once — useful when you're asking questions about how the whole project fits together.",
+      "<strong>You can switch between tools.</strong> You're not locked in. Some builders use Claude Code for some tasks and Gemini CLI for others. Try both.",
+      "<strong>Same confirmation habit.</strong> Like Claude Code, Gemini CLI proposes changes before making them. Always read before saying yes."
+    ],
+    chips:["Terminal","Google Gemini","Large context","Plain English"]
+  }
+};
+
+/* ── Terminal animation ── */
+const TERM_SCRIPT = [
+  {type:'prompt', text:'https://github.com/alyssafuward/open-room-open-source I need help setting up my room', delay:800},
+  {type:'output', cls:'dim', text:'Reading repository...', delay:600},
+  {type:'output', cls:'blue', text:'✓ Found CLAUDE.md setup instructions', delay:400},
+  {type:'output', cls:'', text:'', delay:200},
+  {type:'output', cls:'orange', text:"What's your GitHub username? I'll look up your reserved room.", delay:500},
+  {type:'prompt', text:'afwcoaching-beep', delay:900},
+  {type:'output', cls:'dim', text:'Searching GitHub issues...', delay:700},
+  {type:'output', cls:'blue', text:'✓ Found room: quiet-glade (issue #111)', delay:400},
+  {type:'output', cls:'', text:'', delay:200},
+  {type:'output', cls:'orange', text:'Your room ID is quiet-glade. Does that sound right?', delay:500},
+  {type:'prompt', text:'yes', delay:800},
+  {type:'output', cls:'dim', text:'Forking repository to your account...', delay:900},
+  {type:'output', cls:'dim', text:'Cloning fork to local machine...', delay:1000},
+  {type:'output', cls:'blue', text:'✓ Ready! Setting up your room folder.', delay:400},
+  {type:'output', cls:'', text:'', delay:200},
+  {type:'output', cls:'orange', text:"What background image would you like for your room?", delay:500},
+  {type:'prompt', text:'[drags in image file: neon-glow.jpg]', delay:1000},
+  {type:'output', cls:'dim', text:'Checking image size... 4.2MB → compressing...', delay:800},
+  {type:'output', cls:'blue', text:'✓ Image compressed to 380KB', delay:400},
+  {type:'output', cls:'orange', text:"What would you like to call your room?", delay:500},
+  {type:'prompt', text:'Neon Glowy', delay:700},
+  {type:'output', cls:'blue', text:'✓ Room created. Starting local preview...', delay:600},
+  {type:'output', cls:'', text:'', delay:200},
+  {type:'output', cls:'orange', text:'Open http://localhost:3000 to preview your room. Ready to push when you are!', delay:500},
+];
+
+let termTimeout = null;
+let termRunning = false;
+
+function runTerminal() {
+  const body = document.getElementById('termBody');
+  if (!body || termRunning) return;
+  termRunning = true;
+  body.innerHTML = '';
+  let i = 0;
+  function next() {
+    if (i >= TERM_SCRIPT.length) {
+      // show cursor at end, then restart after pause
+      const cursor = document.createElement('div');
+      cursor.innerHTML = '<span class="term-prompt">❯</span> <span class="term-cursor"></span>';
+      cursor.style.display = 'flex';
+      cursor.style.gap = '8px';
+      body.appendChild(cursor);
+      termTimeout = setTimeout(() => { termRunning = false; runTerminal(); }, 4000);
+      return;
+    }
+    const s = TERM_SCRIPT[i++];
+    const line = document.createElement('div');
+    if (s.type === 'prompt') {
+      line.className = 'term-line';
+      line.innerHTML = '<span class="term-prompt">❯</span><span class="term-input"></span>';
+      body.appendChild(line);
+      const inp = line.querySelector('.term-input');
+      let ci = 0;
+      function typeChar() {
+        if (ci < s.text.length) {
+          inp.textContent += s.text[ci++];
+          body.scrollTop = body.scrollHeight;
+          termTimeout = setTimeout(typeChar, 38 + Math.random()*30);
+        } else {
+          termTimeout = setTimeout(next, s.delay);
+        }
+      }
+      typeChar();
+    } else {
+      line.className = 'term-line';
+      line.innerHTML = `<span class="term-output ${s.cls||''}">${s.text || '&nbsp;'}</span>`;
+      body.appendChild(line);
+      body.scrollTop = body.scrollHeight;
+      termTimeout = setTimeout(next, s.delay);
+    }
+  }
+  next();
+}
+
+/* ── Panel open/close ── */
+function openPanel(n) {
+  if (termTimeout) clearTimeout(termTimeout);
+  termRunning = false;
+  const d = PANELS[n];
+  document.getElementById('panelIcon').textContent = d.icon;
+  document.getElementById('panelEyebrow').textContent = 'Topic ' + String(n).padStart(2,'0');
+  document.getElementById('panelTitle').textContent = d.title;
+  document.getElementById('panelPoints').innerHTML = d.points.map(p =>
+    `<div class="panel-point"><div class="point-dot" style="background:${d.color}"></div><div class="point-text">${p}</div></div>`
+  ).join('');
+  document.getElementById('panelDiagram').innerHTML = d.diagram || '';
+  document.getElementById('panelChips').innerHTML = d.chips.map(c =>
+    `<div class="panel-chip">${c}</div>`
+  ).join('');
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('panel').scrollTop = 0;
+  if (n === 8) setTimeout(runTerminal, 400);
+  if (n === 4) { slideIndex = 0; setTimeout(() => { initSlideshow(); goToSlide(0); }, 50); }
+}
+
+function closePanel(e) {
+  if (!e || e.target === document.getElementById('panelOverlay')) {
+    if (termTimeout) clearTimeout(termTimeout);
+    termRunning = false;
+    document.getElementById('panelOverlay').classList.remove('open');
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+/* ── Slideshow ── */
+let slideIndex = 0;
+function initSlideshow() {
+  const dots = document.getElementById('slideDots');
+  if (!dots || dots.children.length) return;
+  const imgs = document.querySelectorAll('#githubSlideshow .slideshow-img');
+  imgs.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'slideshow-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goToSlide(i);
+    dots.appendChild(d);
+  });
+}
+function goToSlide(n) {
+  const imgs = document.querySelectorAll('#githubSlideshow .slideshow-img');
+  const dots = document.querySelectorAll('#slideDots .slideshow-dot');
+  imgs[slideIndex].classList.remove('active');
+  dots[slideIndex].classList.remove('active');
+  slideIndex = n;
+  imgs[slideIndex].classList.add('active');
+  dots[slideIndex].classList.add('active');
+  document.getElementById('slideCounter').textContent = (slideIndex + 1) + ' / ' + imgs.length;
+  document.getElementById('slidePrev').disabled = slideIndex === 0;
+  document.getElementById('slideNext').disabled = slideIndex === imgs.length - 1;
+}
+function slideMove(dir) { goToSlide(slideIndex + dir); }
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('panelOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') slideMove(1);
+  if (e.key === 'ArrowLeft') slideMove(-1);
+});
+</script>
+</body>
+</html>

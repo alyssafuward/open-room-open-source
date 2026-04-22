@@ -53,6 +53,76 @@ const TYPE_DOT: Record<Node['type'], string> = {
   system:  'bg-amber-500',
 };
 
+// ─── GIT FLOW ────────────────────────────────────────────────────────────────
+
+type GitZone = 'upstream' | 'fork' | 'local';
+type GitStepId = 'fork' | 'clone' | 'build' | 'commit' | 'push' | 'pr' | 'merge' | 'sync';
+
+interface GitStep {
+  id: GitStepId;
+  label: string;
+  detail: string;
+  from: GitZone | null;
+  to: GitZone | null;
+}
+
+const GIT_STEPS: GitStep[] = [
+  {
+    id: 'fork',
+    label: 'Fork the repo',
+    detail: "GitHub copies alyssafuward/open-room-open-source to your own account. You now have your own version at your-name/open-room-open-source. This is a one-time setup — you can freely change your copy without affecting the original.",
+    from: 'upstream', to: 'fork',
+  },
+  {
+    id: 'clone',
+    label: 'Clone to your computer',
+    detail: "Downloads your fork from GitHub onto your local machine. Now the files are on your computer and you can edit them. Your local copy stays linked to your GitHub fork so you can sync changes back up.",
+    from: 'fork', to: 'local',
+  },
+  {
+    id: 'build',
+    label: 'Build your room',
+    detail: "Add your background image and edit config.json to define hotspots and links. Everything happens on your computer — no uploads yet.",
+    from: null, to: 'local',
+  },
+  {
+    id: 'commit',
+    label: 'Commit',
+    detail: "Saves a snapshot of your changes locally. Think of it as hitting Save, but better — git keeps the full history of every commit. Commits only exist on your computer until you push.",
+    from: null, to: 'local',
+  },
+  {
+    id: 'push',
+    label: 'Push',
+    detail: "Uploads your commits from your computer to your fork on GitHub. Think of it as backing up your work and making it visible online. You can push as many times as you want.",
+    from: 'local', to: 'fork',
+  },
+  {
+    id: 'pr',
+    label: 'Open a Pull Request',
+    detail: "A Pull Request is how you ask the maintainer to review and bring your changes into the main project. It shows exactly what files you changed. Vercel automatically builds a preview so your room can be reviewed before it goes live.",
+    from: 'fork', to: 'upstream',
+  },
+  {
+    id: 'merge',
+    label: 'Maintainer merges',
+    detail: "The maintainer reviews your room in the Vercel preview and merges if it looks good. Your files are now part of the main repo. Vercel redeploys production and your room tile goes from 'under construction' to live.",
+    from: 'fork', to: 'upstream',
+  },
+  {
+    id: 'sync',
+    label: 'Sync (if needed)',
+    detail: "If other rooms were merged while you were building, the main repo has moved ahead of your fork. You need to pull those changes in before opening a PR. GitHub's interface has a 'Sync fork' button that does this in one click.",
+    from: 'upstream', to: 'fork',
+  },
+];
+
+const ZONE_LABELS: Record<GitZone, { title: string; sub: string; color: string; bg: string; border: string }> = {
+  upstream: { title: 'GitHub — main project', sub: 'alyssafuward/open-room-open-source', color: 'text-indigo-900', bg: 'bg-indigo-50', border: 'border-indigo-200' },
+  fork:     { title: 'GitHub — your fork',    sub: 'your-name/open-room-open-source',   color: 'text-violet-900', bg: 'bg-violet-50', border: 'border-violet-200' },
+  local:    { title: 'Your computer',          sub: 'local files',                       color: 'text-amber-900',  bg: 'bg-amber-50',  border: 'border-amber-200' },
+};
+
 // ─── ARCHITECTURE FLOWS ──────────────────────────────────────────────────────
 
 type Layer = 'user' | 'app' | 'database' | 'hosting' | 'static';
@@ -147,11 +217,15 @@ const TRIGGERS: Trigger[] = [
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function DiagramModal({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'journey' | 'architecture'>('journey');
+  const [tab, setTab] = useState<'journey' | 'architecture' | 'git'>('journey');
 
   // Journey state
   const [active, setActive] = useState<NodeId | null>(null);
   const activeNode = NODES.find(n => n.id === active);
+
+  // Git flow state
+  const [activeGitStep, setActiveGitStep] = useState<GitStepId | null>(null);
+  const activeGitStepNode = GIT_STEPS.find(s => s.id === activeGitStep);
 
   // Architecture state
   const [activeTrigger, setActiveTrigger] = useState<string>(TRIGGERS[0].id);
@@ -198,6 +272,14 @@ export default function DiagramModal({ onClose }: { onClose: () => void }) {
               }`}
             >
               What Happens When…
+            </button>
+            <button
+              onClick={() => { setTab('git' as typeof tab); setActiveGitStep(null); }}
+              className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${
+                tab === 'git' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              Git Flow
             </button>
           </div>
         </div>
@@ -371,6 +453,110 @@ export default function DiagramModal({ onClose }: { onClose: () => void }) {
                     Click any step in the chain to see what's happening under the hood.
                   </p>
                 </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── GIT FLOW ── */}
+        {tab === 'git' && (
+          <div className="flex flex-col md:flex-row gap-0">
+            {/* Left: steps list */}
+            <div className="flex-1 p-8 pt-0">
+              <p className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-4">The Flow</p>
+              <div className="space-y-1.5">
+                {GIT_STEPS.map((step, i) => {
+                  const isActive = activeGitStep === step.id;
+                  return (
+                    <div key={step.id} className="flex items-start gap-3">
+                      <div className="flex flex-col items-center pt-1">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black border-2 flex-shrink-0 ${
+                          isActive ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-500'
+                        }`}>
+                          {i + 1}
+                        </div>
+                        {i < GIT_STEPS.length - 1 && <div className="w-px h-3 bg-slate-200 mt-1" />}
+                      </div>
+                      <button
+                        onClick={() => setActiveGitStep(isActive ? null : step.id)}
+                        className={`flex-1 text-left px-3 py-2 rounded-xl border text-xs font-bold transition-all ${
+                          isActive
+                            ? 'bg-slate-900 border-slate-900 text-white'
+                            : 'bg-white border-slate-200 text-slate-700 hover:shadow-sm'
+                        }`}
+                      >
+                        {step.label}
+                        {step.id === 'sync' && (
+                          <span className={`ml-2 text-[9px] font-black uppercase tracking-widest ${isActive ? 'text-slate-400' : 'text-slate-400'}`}>
+                            optional
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Right: spatial diagram + detail */}
+            <div className="w-full md:w-72 bg-slate-50 p-8 border-t md:border-t-0 md:border-l border-slate-100 flex flex-col gap-4">
+              {/* Spatial diagram */}
+              <div className="space-y-0">
+                {(['upstream', 'fork', 'local'] as GitZone[]).map((zone, zi) => {
+                  const z = ZONE_LABELS[zone];
+                  const isFrom = activeGitStepNode?.from === zone;
+                  const isTo = activeGitStepNode?.to === zone;
+                  const isActive = isFrom || isTo;
+                  const showConnector = zi < 2;
+                  const nextZone = zi === 0 ? 'fork' : 'local';
+                  const upOps = GIT_STEPS.filter(s => s.from === nextZone && s.to === zone);
+                  const downOps = GIT_STEPS.filter(s => s.from === zone && s.to === nextZone);
+
+                  return (
+                    <div key={zone}>
+                      <div className={`rounded-xl border px-3 py-2.5 transition-all ${
+                        isActive ? `${z.bg} ${z.border} ring-2 ring-offset-1 ring-current ${z.color}` : `bg-white border-slate-200 text-slate-500`
+                      }`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest ${isActive ? z.color : 'text-slate-400'}`}>
+                          {z.title}
+                        </p>
+                        <p className={`text-[10px] font-mono mt-0.5 ${isActive ? z.color : 'text-slate-300'}`}>
+                          {z.sub}
+                        </p>
+                      </div>
+                      {showConnector && (
+                        <div className="flex justify-between items-center px-4 py-1 text-[10px] font-black">
+                          <div className="flex flex-col gap-0.5">
+                            {downOps.map(op => (
+                              <span key={op.id} className={`${activeGitStep === op.id ? 'text-slate-900' : 'text-slate-300'}`}>
+                                ↓ {op.label}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex flex-col gap-0.5 items-end">
+                            {upOps.map(op => (
+                              <span key={op.id} className={`${activeGitStep === op.id ? 'text-slate-900' : 'text-slate-300'}`}>
+                                {op.label} ↑
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Detail text */}
+              {activeGitStepNode ? (
+                <div className="border-t border-slate-200 pt-4">
+                  <p className="text-slate-900 font-black text-sm mb-2">{activeGitStepNode.label}</p>
+                  <p className="text-slate-600 text-xs leading-relaxed">{activeGitStepNode.detail}</p>
+                </div>
+              ) : (
+                <p className="text-slate-400 text-xs leading-relaxed border-t border-slate-200 pt-4">
+                  Click any step to see what it does and where your files go.
+                </p>
               )}
             </div>
           </div>
