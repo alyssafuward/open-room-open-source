@@ -13,7 +13,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/village-square-preview.jpg",
       "url": "https://village-square.pages.dev"
     },
     {
@@ -24,7 +23,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/dose-of-wonder.jpg",
       "url": "https://caitlinmccoll.substack.com"
     },
     {
@@ -35,7 +33,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/prompt-and-pen.jpg",
       "url": "https://promptandpen.substack.com"
     },
     {
@@ -46,7 +43,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-whimsy.jpg",
       "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance"
     },
     {
@@ -57,7 +53,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-good-vibes.jpg",
       "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people"
     },
     {
@@ -68,7 +63,6 @@
       "width": 12,
       "height": 28,
       "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-running-empty.jpg",
       "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do"
     }
   ]
