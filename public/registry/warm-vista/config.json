@@ -13,7 +13,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://village-square.pages.dev"
+      "url": "https://village-square.pages.dev",
+      "hint": true
     },
     {
       "id": "dose-of-wonder",
@@ -23,7 +24,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://caitlinmccoll.substack.com"
+      "url": "https://caitlinmccoll.substack.com",
+      "hint": true
     },
     {
       "id": "prompt-and-pen",
@@ -33,7 +35,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://promptandpen.substack.com"
+      "url": "https://promptandpen.substack.com",
+      "hint": true
     },
     {
       "id": "essay-whimsy",
@@ -43,7 +46,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance"
+      "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance",
+      "hint": true
     },
     {
       "id": "essay-good-vibes",
@@ -53,7 +57,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people"
+      "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people",
+      "hint": true
     },
     {
       "id": "essay-running-empty",
@@ -63,7 +68,8 @@
       "width": 12,
       "height": 28,
       "action": "open_url",
-      "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do"
+      "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do",
+      "hint": true
     }
   ]
 }
