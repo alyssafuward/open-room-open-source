@@ -35,16 +35,6 @@
       "modal": "registry"
     },
     {
-      "id": "window-list",
-      "label": "Window",
-      "x": 15,
-      "y": 15,
-      "width": 7,
-      "height": 40,
-      "action": "open_modal",
-      "modal": "waitlist"
-    },
-    {
       "id": "anchors-slides",
       "label": "Open Room Onboarding",
       "x": 25,

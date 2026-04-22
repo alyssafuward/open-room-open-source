@@ -175,7 +175,7 @@ function OpenRoomInner() {
 
           const isAdjacent = Array.from(occupied).some(coord => {
             const [ox, oy] = coord.split(',').map(Number);
-            return Math.max(Math.abs(ox - x), Math.abs(oy - y)) === 1;
+            return Math.abs(ox - x) + Math.abs(oy - y) === 1;
           });
 
           if (!isAdjacent) return <div key={`${x}-${y}`} className="w-28 h-28" />;
