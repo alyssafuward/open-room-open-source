@@ -175,14 +175,26 @@ function OpenRoomInner() {
 
           const isAdjacent = Array.from(occupied).some(coord => {
             const [ox, oy] = coord.split(',').map(Number);
-            return (Math.abs(ox - x) + Math.abs(oy - y)) === 1;
+            return Math.max(Math.abs(ox - x), Math.abs(oy - y)) === 1;
           });
 
-          return isAdjacent ? (
-            <button key={`${x}-${y}`} onClick={() => setReserving({ x, y })} className="w-28 h-28 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 flex items-center justify-center text-slate-400 hover:text-indigo-500 transition-all font-bold text-[10px]">
-              + ADD ROOM
+          if (!isAdjacent) return <div key={`${x}-${y}`} className="w-28 h-28" />;
+
+          const availableCells = yRange.flatMap(cy => xRange.filter(cx => {
+            if (occupied.has(`${cx},${cy}`)) return false;
+            return Array.from(occupied).some(coord => {
+              const [ox, oy] = coord.split(',').map(Number);
+              return Math.max(Math.abs(ox - cx), Math.abs(oy - cy)) === 1;
+            });
+          }).map(cx => `${cx},${cy}`));
+          const cellNum = availableCells.indexOf(`${x},${y}`) + 1;
+
+          return (
+            <button key={`${x}-${y}`} onClick={() => setReserving({ x, y })} className="w-28 h-28 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-500 transition-all gap-1">
+              <span className="font-bold text-[10px]">+ ADD ROOM</span>
+              <span className="font-black text-sm leading-none opacity-60">{cellNum}</span>
             </button>
-          ) : <div key={`${x}-${y}`} className="w-28 h-28" />;
+          );
         }))}
       </div>
       </FloorPlanCanvas>
