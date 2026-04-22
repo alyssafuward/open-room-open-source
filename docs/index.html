@@ -212,6 +212,10 @@
 
 const GIT_DIAGRAM = `
 
+<div class="diagram-section">
+  <div class="diagram-label">How GitHub works — overview</div>
+  <img src="./how-github-works.png" alt="How GitHub works — handwritten diagram by Alyssa Fu Ward" style="width:100%;border-radius:12px;border:1px solid var(--border);">
+</div>
 
 <div class="diagram-section">
   <div class="diagram-label">How branches work</div>
@@ -227,7 +231,7 @@ const GIT_DIAGRAM = `
       <circle cx="430" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
       <circle cx="550" cy="48" r="8" fill="#d9a030" stroke="white" stroke-width="2"/>
       <!-- Main label -->
-      <text x="30" y="24" text-anchor="middle" font-size="11" fill="#9a8e7e" font-family="Instrument Sans, sans-serif" letter-spacing="1" font-weight="500">MAIN</text>
+      <text x="30" y="24" text-anchor="middle" font-size="11" fill="#9a8e7e" font-family="Instrument Sans, sans-serif" letter-spacing="1" font-weight="500">MAIN BRANCH</text>
       <text x="30" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">abc</text>
       <text x="110" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">def</text>
       <text x="200" y="72" text-anchor="middle" font-size="9" fill="#bbb" font-family="Courier New, monospace">123</text>
@@ -257,7 +261,7 @@ const GIT_DIAGRAM = `
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
       <div style="font-size:11px;color:var(--muted);background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;line-height:1.5;flex:1;min-width:200px">
         <strong style="color:var(--ink);display:block;margin-bottom:2px">🌿 Feature branch</strong>
-        A copy of main (or another branch) where you make your changes safely. When done, you open a PR to merge it back in. In Open Room, builders work on their fork's main branch — same idea, just at the repo level instead of within a repo.
+        A copy of the main branch (or another branch) where you make your changes safely. When done, you open a PR to merge it back in. In Open Room, builders work on their fork's main branch — same idea, just at the repo level instead of within a repo.
       </div>
       <div style="font-size:11px;color:var(--muted);background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;line-height:1.5;flex:1;min-width:200px">
         <strong style="color:var(--ink);display:block;margin-bottom:2px">⚪ Commit</strong>
@@ -371,7 +375,7 @@ const PANELS = {
       "<strong>Clone.</strong> Downloading your fork from GitHub to your local computer so Claude Code can edit files directly on your machine.",
       "<strong>Main branch.</strong> Every repo has a main branch — the live, published version of the code. It's the source of truth.",
       "<strong>Feature branch.</strong> A copy of the main branch where you make changes safely. When done, you open a pull request to merge it back in.",
-      "<strong>Pull Request (PR).</strong> A formal ask for the maintainer to pull your changes into the main repo. You push your work, they review and approve."
+      "<strong>Pull Request (PR).</strong> A formal ask for the maintainer to pull your changes into the base repo. You push your work, they review and approve."
     ],
     diagram: GIT_DIAGRAM,
     chips:["Repository","Fork","Clone","Main branch","Feature branch","Pull Request","Commit"]
