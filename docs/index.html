@@ -135,6 +135,19 @@
   .term-cursor{display:inline-block;width:8px;height:14px;background:#d9a030;animation:blink 1s infinite;vertical-align:middle;margin-left:2px;}
   @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
+  /* Slideshow */
+  .slideshow{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .slideshow-img{display:none;width:100%;height:auto;border-radius:12px;}
+  .slideshow-img.active{display:block;}
+  .slideshow-controls{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);border-top:1px solid var(--border);}
+  .slideshow-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--muted);transition:all .15s;font-family:'Instrument Sans',sans-serif;}
+  .slideshow-btn:hover:not(:disabled){border-color:var(--ink);color:var(--ink);}
+  .slideshow-btn:disabled{opacity:.3;cursor:default;}
+  .slideshow-counter{font-size:11px;color:var(--muted);font-family:'Instrument Sans',sans-serif;}
+  .slideshow-dots{display:flex;gap:5px;align-items:center;}
+  .slideshow-dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .15s;}
+  .slideshow-dot.active{background:var(--accent);}
+
   /* Pull request name explanation box */
   .pr-explain{background:#fff8f0;border:1px solid #f5d0a0;border-radius:10px;padding:14px 18px;margin-top:16px;font-size:13px;color:#5a3a10;line-height:1.65;}
   .pr-explain strong{color:#8a4a10;}
@@ -213,8 +226,26 @@
 const GIT_DIAGRAM = `
 
 <div class="diagram-section">
-  <div class="diagram-label">How GitHub works — overview</div>
-  <img src="./how-github-works.png" alt="How GitHub works — handwritten diagram by Alyssa Fu Ward" style="width:100%;border-radius:12px;border:1px solid var(--border);">
+  <div class="diagram-label">How GitHub works — step by step</div>
+  <div class="slideshow" id="githubSlideshow">
+    <img class="slideshow-img active" src="./github-slide-01.png" alt="Slide 1">
+    <img class="slideshow-img" src="./github-slide-02.png" alt="Slide 2">
+    <img class="slideshow-img" src="./github-slide-03.png" alt="Slide 3">
+    <img class="slideshow-img" src="./github-slide-04.png" alt="Slide 4">
+    <img class="slideshow-img" src="./github-slide-05.png" alt="Slide 5">
+    <img class="slideshow-img" src="./github-slide-06.png" alt="Slide 6">
+    <img class="slideshow-img" src="./github-slide-07.png" alt="Slide 7">
+    <img class="slideshow-img" src="./github-slide-08.png" alt="Slide 8">
+    <img class="slideshow-img" src="./github-slide-09.png" alt="Slide 9">
+    <div class="slideshow-controls">
+      <button class="slideshow-btn" id="slidePrev" onclick="slideMove(-1)" disabled>← Back</button>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div class="slideshow-dots" id="slideDots"></div>
+        <span class="slideshow-counter" id="slideCounter">1 / 9</span>
+      </div>
+      <button class="slideshow-btn" id="slideNext" onclick="slideMove(1)">Next →</button>
+    </div>
+  </div>
 </div>
 
 <div class="diagram-section">
@@ -532,6 +563,7 @@ function openPanel(n) {
   document.getElementById('panelOverlay').classList.add('open');
   document.getElementById('panel').scrollTop = 0;
   if (n === 8) setTimeout(runTerminal, 400);
+  if (n === 4) { slideIndex = 0; setTimeout(() => { initSlideshow(); goToSlide(0); }, 50); }
 }
 
 function closePanel(e) {
@@ -543,6 +575,38 @@ function closePanel(e) {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+/* ── Slideshow ── */
+let slideIndex = 0;
+function initSlideshow() {
+  const dots = document.getElementById('slideDots');
+  if (!dots || dots.children.length) return;
+  const imgs = document.querySelectorAll('#githubSlideshow .slideshow-img');
+  imgs.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'slideshow-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goToSlide(i);
+    dots.appendChild(d);
+  });
+}
+function goToSlide(n) {
+  const imgs = document.querySelectorAll('#githubSlideshow .slideshow-img');
+  const dots = document.querySelectorAll('#slideDots .slideshow-dot');
+  imgs[slideIndex].classList.remove('active');
+  dots[slideIndex].classList.remove('active');
+  slideIndex = n;
+  imgs[slideIndex].classList.add('active');
+  dots[slideIndex].classList.add('active');
+  document.getElementById('slideCounter').textContent = (slideIndex + 1) + ' / ' + imgs.length;
+  document.getElementById('slidePrev').disabled = slideIndex === 0;
+  document.getElementById('slideNext').disabled = slideIndex === imgs.length - 1;
+}
+function slideMove(dir) { goToSlide(slideIndex + dir); }
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('panelOverlay').classList.contains('open')) return;
+  if (e.key === 'ArrowRight') slideMove(1);
+  if (e.key === 'ArrowLeft') slideMove(-1);
+});
 </script>
 </body>
 </html>
