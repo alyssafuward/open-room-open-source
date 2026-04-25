@@ -1,120 +1,13 @@
 name: Sync rooms to Supabase
 
 on:
-  pull_request:
-    types: [opened, synchronize]
-    branches: [main]
-  pull_request_target:
-    types: [opened, synchronize]
-    branches: [main]
   push:
     branches: [main]
     paths:
       - 'public/registry/**/config.json'
 
 jobs:
-  # On PR: update changed rooms in dev so preview reflects config
-  # New reservations are mirrored to dev automatically via the mirror-to-dev Edge Function
-  sync-prod-to-dev:
-    if: |
-      github.event_name == 'pull_request' ||
-      (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-
-      - name: Update changed rooms in dev
-        env:
-          SUPABASE_DEV_URL: ${{ secrets.SUPABASE_DEV_URL }}
-          SUPABASE_DEV_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_DEV_SERVICE_ROLE_KEY }}
-        run: |
-          node << 'EOF'
-          const fs = require('fs');
-
-          // Only sync top-level registry folders (not sub-pages like pages/*)
-          const registryDir = 'public/registry';
-          const folders = fs.readdirSync(registryDir).filter(f => {
-            if (f === '_template') return false;
-            return fs.existsSync(`${registryDir}/${f}/config.json`);
-          });
-
-          async function syncRoom(folder) {
-            const config = JSON.parse(fs.readFileSync(`${registryDir}/${folder}/config.json`, 'utf8'));
-            const name = config.room_display_name;
-            if (!name) return;
-
-            const res = await fetch(
-              `${process.env.SUPABASE_DEV_URL}/rest/v1/rooms?registry_id=eq.${encodeURIComponent(folder)}`,
-              {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'apikey': process.env.SUPABASE_DEV_SERVICE_ROLE_KEY,
-                  'Authorization': `Bearer ${process.env.SUPABASE_DEV_SERVICE_ROLE_KEY}`,
-                  'Prefer': 'return=representation',
-                },
-                body: JSON.stringify({ name, status: 'active' }),
-              }
-            );
-
-            const data = await res.json();
-            if (!res.ok) { console.error(`Failed: ${folder}`, data); process.exit(1); }
-            if (!data.length) console.warn(`⚠ ${folder}: no row in dev — was it reserved?`);
-            else console.log(`✓ ${folder} → "${name}", status: active`);
-          }
-
-          Promise.all(folders.map(syncRoom))
-            .catch(err => { console.error(err); process.exit(1); });
-          EOF
-
-      - name: Mark deleted rooms in dev
-        env:
-          SUPABASE_DEV_URL: ${{ secrets.SUPABASE_DEV_URL }}
-          SUPABASE_DEV_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_DEV_SERVICE_ROLE_KEY }}
-        run: |
-          # Only mark rooms deleted if their config.json was actually removed in this PR
-          deleted=$(git diff origin/main...HEAD --diff-filter=D --name-only -- 'public/registry/*/config.json' \
-            | sed 's|public/registry/||;s|/config.json||')
-
-          if [ -z "$deleted" ]; then
-            echo "No registry deletions in this PR — nothing to mark deleted."
-            exit 0
-          fi
-
-          node << 'EOF'
-          const { execSync } = require('child_process');
-
-          const deleted = execSync(
-            "git diff origin/main...HEAD --diff-filter=D --name-only -- 'public/registry/*/config.json'"
-          ).toString().trim().split('\n')
-            .filter(Boolean)
-            .map(p => p.replace('public/registry/', '').replace('/config.json', ''));
-
-          if (!deleted.length) { console.log('Nothing to mark deleted.'); process.exit(0); }
-
-          Promise.all(deleted.map(async id => {
-            const patch = await fetch(
-              `${process.env.SUPABASE_DEV_URL}/rest/v1/rooms?registry_id=eq.${encodeURIComponent(id)}`,
-              {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'apikey': process.env.SUPABASE_DEV_SERVICE_ROLE_KEY,
-                  'Authorization': `Bearer ${process.env.SUPABASE_DEV_SERVICE_ROLE_KEY}`,
-                  'Prefer': 'return=representation',
-                },
-                body: JSON.stringify({ status: 'deleted', grid_x: null, grid_y: null }),
-              }
-            );
-            if (!patch.ok) { console.error(`Failed to mark deleted: ${id}`, await patch.json()); process.exit(1); }
-            console.log(`✓ ${id} marked deleted in dev`);
-          })).catch(err => { console.error(err); process.exit(1); });
-          EOF
-
-  # On merge to main: update changed rooms in prod, then sync prod → dev
+  # On merge to main: update changed rooms in prod
   sync-on-merge:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -198,44 +91,3 @@ jobs:
             .catch(err => { console.error(err); process.exit(1); });
           EOF
 
-      - name: Reconcile dev DB against registry
-        env:
-          SUPABASE_DEV_URL: ${{ secrets.SUPABASE_DEV_URL }}
-          SUPABASE_DEV_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_DEV_SERVICE_ROLE_KEY }}
-        run: |
-          node << 'EOF'
-          const { execSync } = require('child_process');
-
-          async function reconcileDev() {
-            // Only mark rooms deleted if their config.json was removed in this merge commit
-            const deleted = execSync(
-              "git diff HEAD~1 HEAD --diff-filter=D --name-only -- 'public/registry/*/config.json'"
-            ).toString().trim().split('\n')
-              .filter(Boolean)
-              .map(p => p.replace('public/registry/', '').replace('/config.json', ''));
-
-            if (!deleted.length) { console.log('Dev in sync — nothing to mark deleted.'); return; }
-
-            await Promise.all(deleted.map(async id => {
-              const patch = await fetch(
-                `${process.env.SUPABASE_DEV_URL}/rest/v1/rooms?registry_id=eq.${encodeURIComponent(id)}`,
-                {
-                  method: 'PATCH',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': process.env.SUPABASE_DEV_SERVICE_ROLE_KEY,
-                    'Authorization': `Bearer ${process.env.SUPABASE_DEV_SERVICE_ROLE_KEY}`,
-                    'Prefer': 'return=representation',
-                  },
-                  body: JSON.stringify({ status: 'deleted', grid_x: null, grid_y: null }),
-                }
-              );
-              if (!patch.ok) { console.error(`Failed to mark deleted in dev: ${id}`, await patch.json()); process.exit(1); }
-              console.log(`✓ ${id} marked deleted in dev`);
-            }));
-          }
-
-          reconcileDev().catch(err => { console.error(err); process.exit(1); });
-          EOF
-
-      # New reservations are mirrored to dev automatically via the mirror-to-dev Edge Function on INSERT
