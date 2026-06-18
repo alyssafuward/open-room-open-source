@@ -1,0 +1,18 @@
+{
+  "room_display_name": "Hushed Vale",
+  "owner": "wsoofi",
+  "background_image": "/registry/hushed-vale/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "snowy-trail-exit",
+      "label": "Return to Floor Plan",
+      "x": 40, 
+      "y": 70, 
+      "width": 20, 
+      "height": 20,
+      "action": "navigate_floor"
+    }
+  ]
+}

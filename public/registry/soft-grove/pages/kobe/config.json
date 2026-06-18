@@ -1,0 +1,16 @@
+{
+  "room_display_name": "Kobe",
+  "background_image": "/registry/soft-grove/pages/kobe/background.jpeg",
+  "hotspots": [
+    {
+      "id": "bus-link",
+      "label": "alyssafuward.com",
+      "x": 80,
+      "y": 45,
+      "width": 15,
+      "height": 15,
+      "action": "open_url",
+      "url": "https://alyssafuward.com/"
+    }
+  ]
+}

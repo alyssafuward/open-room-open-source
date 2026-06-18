@@ -3,76 +3,73 @@
   "owner": "arrawyn",
   "background_image": "/registry/warm-vista/background.jpg",
   "hide_back_button": false,
-  "links": [  ],
+  "links": [],
   "hotspots": [
     {
       "id": "village-square-preview",
       "label": "Enter the Village Square",
-      "x": 2,
+      "x": 5,
       "y": 5,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/village-square-preview.jpg",
-      "url": "https://village-square.pages.dev"
-
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://village-square.pages.dev",
+      "hint": true
     },
     {
       "id": "dose-of-wonder",
       "label": "Dose of Wonder",
-      "x": 22,
+      "x": 35,
       "y": 5,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/dose-of-wonder.jpg",
-      "url": "https://caitlinmccoll.substack.com"
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://caitlinmccoll.substack.com",
+      "hint": true
     },
     {
       "id": "prompt-and-pen",
       "label": "The Prompt & The Pen",
-      "x": 42,
+      "x": 65,
       "y": 5,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/prompt-and-pen.jpg",
-      "url": "https://promptandpen.substack.com"
-
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://promptandpen.substack.com",
+      "hint": true
     },
     {
       "id": "essay-whimsy",
       "label": "Whimsy as Defiance",
-      "x": 2,
-      "y": 53,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-whimsy.jpg",
-      "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance-why-softness-is"
-
+      "x": 5,
+      "y": 65,
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://caitlinmccoll.substack.com/p/whimsy-as-defiance",
+      "hint": true
     },
     {
       "id": "essay-good-vibes",
       "label": "Good Vibes Only Is Wrecking People",
-      "x": 22,
-      "y": 53,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-good-vibes.jpg",
-      "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people"
+      "x": 35,
+      "y": 65,
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://caitlinmccoll.substack.com/p/good-vibes-only-is-wrecking-people",
+      "hint": true
     },
     {
       "id": "essay-running-empty",
       "label": "Running on Empty — Start Here",
-      "x": 42,
-      "y": 53,
-      "width": 18,
-      "height": 45,
-      "action": "open_image",
-      "image_url": "/registry/warm-vista/essay-running-empty.jpg",
-      "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do"
+      "x": 65,
+      "y": 65,
+      "width": 12,
+      "height": 28,
+      "action": "open_url",
+      "url": "https://caitlinmccoll.substack.com/p/running-on-empty-what-to-do",
+      "hint": true
     }
   ]
 }

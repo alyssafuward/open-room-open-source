@@ -25,6 +25,17 @@
       "action": "navigate_page",
       "path": "pages/100-days/config.json",
       "hint": true
+    },
+    {
+      "id": "door-kobe",
+      "label": "Kobe",
+      "x": 65,
+      "y": 3,
+      "width": 28,
+      "height": 42,
+      "action": "navigate_page",
+      "path": "pages/kobe/config.json",
+      "hint": true
     }
   ]
 }

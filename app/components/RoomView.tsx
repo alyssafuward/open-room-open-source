@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import DiagramModal from './DiagramModal';
-import WaitlistModal from './WaitlistModal';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -514,11 +513,6 @@ export default function RoomView({ onBack, registryId, room }: {
       {/* Diagram Modal */}
       {activeModal === 'diagram' && (
         <DiagramModal onClose={() => setActiveModal(null)} />
-      )}
-
-      {/* Waitlist Modal */}
-      {activeModal === 'waitlist' && (
-        <WaitlistModal onClose={() => setActiveModal(null)} />
       )}
 
       {/* Registry Modal */}
