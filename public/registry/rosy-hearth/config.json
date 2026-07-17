@@ -1,0 +1,18 @@
+{
+  "room_display_name": "Eric's Office",
+  "owner": "egdavis",
+  "background_image": "/registry/rosy-hearth/background.webp",
+  "hide_back_button": true,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "door",
+      "label": "Floor Plan",
+      "x": 89,
+      "y": 26,
+      "width": 9,
+      "height": 44,
+      "action": "navigate_floor"
+    }
+  ]
+}
