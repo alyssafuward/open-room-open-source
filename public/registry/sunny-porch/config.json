@@ -1,0 +1,19 @@
+{
+  "room_display_name": "Sunny Porch",
+  "owner": "afflicted6998",
+  "background_image": "/registry/sunny-porch/background.webp",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "random-topic-generator",
+      "label": "Random Topic Generator",
+      "x": 42.5,
+      "y": 3.6,
+      "width": 23.2,
+      "height": 22.9,
+      "action": "open_url",
+      "url": "https://afflicted6998.github.io/disparate-topics-challenge/"
+    }
+  ]
+}
