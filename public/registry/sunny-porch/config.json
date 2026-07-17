@@ -8,10 +8,10 @@
     {
       "id": "random-topic-generator",
       "label": "Random Topic Generator",
-      "x": 41.9,
-      "y": 5.3,
-      "width": 23.7,
-      "height": 19.2,
+      "x": 42.5,
+      "y": 3.6,
+      "width": 23.2,
+      "height": 22.9,
       "action": "open_url",
       "url": "https://afflicted6998.github.io/disparate-topics-challenge/"
     }
