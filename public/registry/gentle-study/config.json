@@ -1,0 +1,19 @@
+{
+  "room_display_name": "The Sanctuary",
+  "owner": "mariechristineoliver1-oss",
+  "background_image": "/registry/gentle-study/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "desk",
+      "label": "The Reframe Diaries",
+      "x": 46,
+      "y": 43,
+      "width": 8,
+      "height": 11,
+      "action": "open_url",
+      "url": "https://thereframediaries.substack.com"
+    }
+  ]
+}
