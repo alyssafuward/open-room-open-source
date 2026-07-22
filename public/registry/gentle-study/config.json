@@ -9,11 +9,21 @@
       "id": "desk",
       "label": "The Reframe Diaries",
       "x": 46,
-      "y": 43,
+      "y": 46,
       "width": 8,
-      "height": 11,
+      "height": 8,
       "action": "open_url",
       "url": "https://thereframediaries.substack.com"
+    },
+    {
+      "id": "permission-slips",
+      "label": "Permission Slips",
+      "x": 80,
+      "y": 13,
+      "width": 13,
+      "height": 30,
+      "action": "navigate_page",
+      "path": "pages/permission-slips/config.json"
     }
   ]
 }
