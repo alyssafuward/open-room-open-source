@@ -1,0 +1,178 @@
+{
+  "room_display_name": "Permission Slips",
+  "owner": "mariechristineoliver1-oss",
+  "background_image": "/registry/gentle-study/pages/permission-slips/background.jpeg",
+  "hide_back_button": false,
+  "hotspots": [
+    {
+      "id": "01-leave-a-room",
+      "label": "Leave a room without explaining yourself",
+      "x": 12.375,
+      "y": 6,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/01-leave-a-room.png"
+    },
+    {
+      "id": "02-cancel-plans",
+      "label": "Cancel plans without guilt",
+      "x": 32.125,
+      "y": 6,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/02-cancel-plans.png"
+    },
+    {
+      "id": "03-comfort-over-convention",
+      "label": "Choose comfort over convention",
+      "x": 51.875,
+      "y": 6,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/03-comfort-over-convention.png"
+    },
+    {
+      "id": "04-let-people-be-disappointed",
+      "label": "Let other people be disappointed",
+      "x": 71.625,
+      "y": 6,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/04-let-people-be-disappointed.png"
+    },
+    {
+      "id": "05-ask-for-clarity",
+      "label": "Ask for clarity",
+      "x": 12.375,
+      "y": 28.667,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/05-ask-for-clarity.png"
+    },
+    {
+      "id": "06-say-no",
+      "label": "Say no without giving a reason",
+      "x": 32.125,
+      "y": 28.667,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/06-say-no.png"
+    },
+    {
+      "id": "07-own-pace",
+      "label": "Choose your own pace",
+      "x": 51.875,
+      "y": 28.667,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/07-own-pace.png"
+    },
+    {
+      "id": "08-step-away-shoulds",
+      "label": "Step away from the shoulds",
+      "x": 71.625,
+      "y": 28.667,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/08-step-away-shoulds.png"
+    },
+    {
+      "id": "09-protect-energy",
+      "label": "Protect your energy as fiercely as your safety",
+      "x": 12.375,
+      "y": 51.333,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/09-protect-energy.png"
+    },
+    {
+      "id": "10-take-up-space",
+      "label": "Take up space exactly as you are",
+      "x": 32.125,
+      "y": 51.333,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/10-take-up-space.png"
+    },
+    {
+      "id": "11-nervous-system",
+      "label": "Your nervous system is not broken",
+      "x": 51.875,
+      "y": 51.333,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/11-nervous-system.png"
+    },
+    {
+      "id": "12-shame-not-proof",
+      "label": "Shame is not proof you are broken",
+      "x": 71.625,
+      "y": 51.333,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/12-shame-not-proof.png"
+    },
+    {
+      "id": "13-never-failing-grief",
+      "label": "You were never failing at grief",
+      "x": 12.375,
+      "y": 74,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/13-never-failing-grief.png"
+    },
+    {
+      "id": "14-different-work",
+      "label": "We are not slow, we are doing different work",
+      "x": 32.125,
+      "y": 74,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/14-different-work.png"
+    },
+    {
+      "id": "15-quiet-is-the-work",
+      "label": "The quiet is the work",
+      "x": 51.875,
+      "y": 74,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/15-quiet-is-the-work.png"
+    },
+    {
+      "id": "16-exactly-where-you-are",
+      "label": "You are allowed to be exactly where you are",
+      "x": 71.625,
+      "y": 74,
+      "width": 16,
+      "height": 16,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/permission-slips/assets/16-exactly-where-you-are.png"
+    },
+    {
+      "id": "exit-floor-plan",
+      "label": "Exit to Floor Plan",
+      "x": 42,
+      "y": 95,
+      "width": 16,
+      "height": 4,
+      "action": "navigate_floor",
+      "hint": true
+    }
+  ]
+}

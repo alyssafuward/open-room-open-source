@@ -1,0 +1,29 @@
+{
+  "room_display_name": "The Sanctuary",
+  "owner": "mariechristineoliver1-oss",
+  "background_image": "/registry/gentle-study/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "desk",
+      "label": "The Reframe Diaries",
+      "x": 46,
+      "y": 46,
+      "width": 8,
+      "height": 8,
+      "action": "open_url",
+      "url": "https://thereframediaries.substack.com"
+    },
+    {
+      "id": "permission-slips",
+      "label": "Permission Slips",
+      "x": 80,
+      "y": 13,
+      "width": 13,
+      "height": 30,
+      "action": "navigate_page",
+      "path": "pages/permission-slips/config.json"
+    }
+  ]
+}
