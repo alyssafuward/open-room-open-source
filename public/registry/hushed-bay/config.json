@@ -1,0 +1,18 @@
+{
+  "room_display_name": "The Hushed Bay Reading Nook",
+  "owner": "humansinthemix",
+  "background_image": "/registry/hushed-bay/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "door",
+      "label": "Back to the floor plan",
+      "x": 56,
+      "y": 24,
+      "width": 13,
+      "height": 63,
+      "action": "navigate_floor"
+    }
+  ]
+}
