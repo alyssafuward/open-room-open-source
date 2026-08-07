@@ -1,0 +1,19 @@
+{
+  "room_display_name": "Bright Grove",
+  "owner": "natalienic87",
+  "background_image": "/registry/bright-grove/background.jpeg",
+  "hide_back_button": false,
+  "links": [],
+  "hotspots": [
+    {
+      "id": "door",
+      "label": "Step through the door",
+      "x": 57,
+      "y": 4,
+      "width": 22,
+      "height": 80,
+      "action": "open_image",
+      "image_url": "/registry/bright-grove/sky.jpeg"
+    }
+  ]
+}
