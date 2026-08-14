@@ -24,6 +24,16 @@
       "height": 30,
       "action": "navigate_page",
       "path": "pages/permission-slips/config.json"
+    },
+    {
+      "id": "the-arc-window",
+      "label": "Discover the Overcapacity, Collapse and Rebuild Arc",
+      "x": 27,
+      "y": 10,
+      "width": 25,
+      "height": 30,
+      "action": "navigate_page",
+      "path": "pages/the-arc/config.json"
     }
   ]
 }

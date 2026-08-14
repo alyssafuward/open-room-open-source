@@ -1,0 +1,119 @@
+{
+  "room_display_name": "The Arc Overlook",
+  "owner": "mariechristineoliver1-oss",
+  "background_image": "/registry/gentle-study/pages/the-arc/background.jpeg",
+  "hide_back_button": false,
+  "render_hotspot_images": false,
+  "hotspots": [
+    {
+      "id": "how-to-read",
+      "label": "How to read this map",
+      "x": 3.5,
+      "y": 79.78,
+      "width": 15.0,
+      "height": 6.67,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/card_00_how_to_read.png"
+    },
+    {
+      "id": "phase_01_escape_fantasy",
+      "label": "Escape Fantasy",
+      "x": 4.88,
+      "y": 44.0,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_01_escape_fantasy.png"
+    },
+    {
+      "id": "phase_02_compensation",
+      "label": "Compensation",
+      "x": 16.44,
+      "y": 39.33,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_02_compensation.png"
+    },
+    {
+      "id": "phase_03_the_crash",
+      "label": "The Crash",
+      "x": 39.25,
+      "y": 58.44,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_03_the_crash.png"
+    },
+    {
+      "id": "phase_04_the_trough",
+      "label": "The Trough",
+      "x": 48.94,
+      "y": 69.0,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_04_the_trough.png"
+    },
+    {
+      "id": "phase_05_stabilisation",
+      "label": "Stabilisation",
+      "x": 61.12,
+      "y": 60.67,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_05_stabilisation.png"
+    },
+    {
+      "id": "phase_06_rebuilding",
+      "label": "Rebuilding",
+      "x": 72.06,
+      "y": 52.0,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_06_rebuilding.png"
+    },
+    {
+      "id": "phase_07_living_from_truth",
+      "label": "Living From Truth",
+      "x": 83.5,
+      "y": 46.44,
+      "width": 9.0,
+      "height": 13.11,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/phase_07_living_from_truth.png"
+    },
+    {
+      "id": "event_diagnosis",
+      "label": "Diagnosis — an event, not a phase",
+      "x": 25.31,
+      "y": 38.11,
+      "width": 5.0,
+      "height": 10.0,
+      "action": "open_image",
+      "image_url": "/registry/gentle-study/pages/the-arc/assets/event_diagnosis.png"
+    },
+    {
+      "id": "get-the-pocket-guide",
+      "label": "Get the pocket guide",
+      "x": 82.62,
+      "y": 79.78,
+      "width": 14.5,
+      "height": 13.78,
+      "action": "open_url",
+      "url": "https://thereframediaries.substack.com/p/where-am-i-pocket-guide"
+    },
+    {
+      "id": "exit-floor-plan",
+      "label": "Exit to Floor Plan",
+      "x": 42,
+      "y": 95,
+      "width": 16,
+      "height": 4,
+      "action": "navigate_floor",
+      "hint": true
+    }
+  ]
+}

@@ -39,6 +39,7 @@ interface RoomConfig {
   back_room_id?: string;
   back_label?: string;
   title?: string;
+  render_hotspot_images?: boolean;
 }
 
 interface RegistryEntry {
@@ -201,8 +202,8 @@ export default function RoomView({ onBack, registryId, room }: {
           draggable={false}
         />
 
-        {/* Render images directly on the wall */}
-        {config.hotspots.filter(h => h.action === 'open_image' && h.image_url).map(hotspot => (
+        {/* Render images directly on the wall (unless the room opts out, e.g. a map where images open only on tap) */}
+        {config.render_hotspot_images !== false && config.hotspots.filter(h => h.action === 'open_image' && h.image_url).map(hotspot => (
           <div
             key={`img-${hotspot.id}`}
             className="absolute pointer-events-none"
