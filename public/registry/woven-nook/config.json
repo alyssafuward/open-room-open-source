@@ -1,5 +1,5 @@
 {
-  "room_display_name": "The Threshold",
+  "room_display_name": "The Threshold 🔮",
   "owner": "rspitzer",
   "background_image": "/registry/woven-nook/background.jpeg",
   "hide_back_button": true,
@@ -11,21 +11,21 @@
       "id": "threshold-door",
       "label": "Step through",
       "x": 35,
-      "y": 10,
+      "y": 55,
       "width": 30,
-      "height": 80,
+      "height": 40,
       "action": "open_url",
       "url": "https://threshold-chi.vercel.app"
     },
     {
       "id": "asks-wall",
-      "label": "In Search Of",
-      "x": 75,
-      "y": 25,
-      "width": 20,
-      "height": 30,
+      "label": "Voices from the threshold",
+      "x": 10,
+      "y": 2,
+      "width": 80,
+      "height": 55,
       "action": "open_image",
-      "image_url": "https://threshold-chi.vercel.app/api/asks-wall.png"
+      "image_url": "https://threshold-chi.vercel.app/api/wall-lanterns.png"
     },
     {
       "id": "exit",
