@@ -24,15 +24,21 @@ function generateRoomId() {
   return `${adj}-${noun}`;
 }
 
-export default function ReservationModal({ x, y, onClose, onSuccess }: {
+export default function ReservationModal({ x, y, lockId, onClose, onSuccess }: {
   x: number;
   y: number;
+  lockId: string;
   onClose: () => void;
   onSuccess: (room: any, roomId: string) => void;
 }) {
   const [form, setForm] = useState({ name: '', github: '', email: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const handleClose = async () => {
+    await supabase!.from('rooms').delete().eq('id', lockId);
+    onClose();
+  };
 
   const set = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -62,9 +68,9 @@ export default function ReservationModal({ x, y, onClose, onSuccess }: {
       attempts++;
     }
 
-    const { data, error: insertError } = await supabase!
+    const { data, error: updateError } = await supabase!
       .from('rooms')
-      .insert([{
+      .update({
         name: roomId,
         owner_name: form.name,
         owner_id: form.github,
@@ -74,15 +80,14 @@ export default function ReservationModal({ x, y, onClose, onSuccess }: {
         registry_id: roomId,
         status: 'reserved',
         reserved_at: new Date().toISOString(),
-        grid_x: x,
-        grid_y: y,
-      }])
+      })
+      .eq('id', lockId)
       .select()
       .single();
 
     setLoading(false);
 
-    if (insertError) {
+    if (updateError) {
       setError('Something went wrong. Please try again.');
       return;
     }
@@ -93,7 +98,7 @@ export default function ReservationModal({ x, y, onClose, onSuccess }: {
   return (
     <div
       className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 overflow-y-auto p-6"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl mx-auto my-6"

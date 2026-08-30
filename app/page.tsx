@@ -26,7 +26,7 @@ function OpenRoomInner() {
   const [rooms, setRooms] = useState<any[]>([]);
   const [myId, setMyId] = useState<string>('');
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [reserving, setReserving] = useState<{ x: number; y: number } | null>(null);
+  const [reserving, setReserving] = useState<{ x: number; y: number; lockId: string } | null>(null);
   const [successRoom, setSuccessRoom] = useState<{ room: any; roomId: string } | null>(null);
 
   const refreshRooms = useCallback(async () => {
@@ -117,8 +117,12 @@ function OpenRoomInner() {
   }
 
   // --- DYNAMIC FLOORPLAN LOGIC ---
-  const xValues = rooms.length > 0 ? rooms.map(r => r.grid_x) : [0];
-  const yValues = rooms.length > 0 ? rooms.map(r => r.grid_y) : [0];
+  const activeRooms = rooms.filter(r =>
+    r.status !== 'locking' || !r.locked_at || Date.now() - new Date(r.locked_at).getTime() < LOCK_TTL_MS
+  );
+
+  const xValues = activeRooms.length > 0 ? activeRooms.map(r => r.grid_x) : [0];
+  const yValues = activeRooms.length > 0 ? activeRooms.map(r => r.grid_y) : [0];
   const minX = Math.min(...xValues) - 1;
   const maxX = Math.max(...xValues) + 1;
   const minY = Math.min(...yValues) - 1;
@@ -126,10 +130,22 @@ function OpenRoomInner() {
 
   const xRange = Array.from({ length: maxX - minX + 1 }, (_, i) => minX + i);
   const yRange = Array.from({ length: maxY - minY + 1 }, (_, i) => minY + i);
-  const occupied = new Set(rooms.map(r => `${r.grid_x},${r.grid_y}`));
+  const occupied = new Set(activeRooms.map(r => `${r.grid_x},${r.grid_y}`));
+
+  const LOCK_TTL_MS = 5 * 60 * 1000;
+
+  const handleCellClick = async (x: number, y: number) => {
+    const { data, error } = await supabase!
+      .from('rooms')
+      .insert([{ grid_x: x, grid_y: y, status: 'locking', locked_at: new Date().toISOString(), owner_id: myId }])
+      .select('id')
+      .single();
+    if (error || !data) return;
+    setReserving({ x, y, lockId: data.id });
+  };
 
   const handleReservationSuccess = (room: any, roomId: string) => {
-    setRooms(prev => [...prev, room]);
+    setRooms(prev => prev.map(r => r.id === room.id ? room : r));
     setReserving(null);
     setSuccessRoom({ room, roomId });
   };
@@ -155,8 +171,15 @@ function OpenRoomInner() {
         style={{ gridTemplateColumns: `repeat(${xRange.length}, 7rem)` }}
       >
         {yRange.map(y => xRange.map(x => {
-          const room = rooms.find(r => r.grid_x === x && r.grid_y === y);
+          const room = activeRooms.find(r => r.grid_x === x && r.grid_y === y);
           if (room) {
+            if (room.status === 'locking') {
+              return (
+                <div key={`${x}-${y}`} className="w-28 h-28 rounded-2xl border-2 border-dashed border-slate-200 bg-white flex items-center justify-center">
+                  <span className="text-[9px] uppercase tracking-widest text-slate-300 font-bold text-center px-2 leading-tight">Being<br/>Claimed</span>
+                </div>
+              );
+            }
             const isCommon = x === 0 && y === 0;
             return (
               <button
@@ -190,7 +213,7 @@ function OpenRoomInner() {
           const cellNum = availableCells.indexOf(`${x},${y}`) + 1;
 
           return (
-            <button key={`${x}-${y}`} onClick={() => setReserving({ x, y })} className="w-28 h-28 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-500 transition-all gap-1">
+            <button key={`${x}-${y}`} onClick={() => handleCellClick(x, y)} className="w-28 h-28 rounded-2xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 flex flex-col items-center justify-center text-slate-400 hover:text-indigo-500 transition-all gap-1">
               <span className="font-bold text-[10px]">+ ADD ROOM</span>
               <span className="font-black text-sm leading-none opacity-60">{cellNum}</span>
             </button>
@@ -256,6 +279,7 @@ function OpenRoomInner() {
         <ReservationModal
           x={reserving.x}
           y={reserving.y}
+          lockId={reserving.lockId}
           onClose={() => setReserving(null)}
           onSuccess={handleReservationSuccess}
         />
